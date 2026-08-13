@@ -1,0 +1,142 @@
+export type OrderStatus = 'placed' | 'confirmed' | 'preparing' | 'ready' | 'out_for_delivery' | 'delivered' | 'cancelled' | 'payment_failed';
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+export type PaymentMethod = 'cod' | 'razorpay';
+export type UserRole = 'customer' | 'admin';
+
+export interface Profile {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: UserRole;
+}
+
+export interface Category {
+  _id: string;
+  id?: string;
+  name: string;
+  slug: string;
+  description: string;
+  imageUrl: string;
+  isActive: boolean;
+  sortOrder: number;
+}
+
+export interface MenuItem {
+  _id: string;
+  id?: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice: number | null;
+  categoryId: string | null;
+  imageUrl: string;
+  isAvailable: boolean;
+  isBestseller: boolean;
+  isFeatured: boolean;
+  isSpicy: boolean;
+  sortOrder: number;
+  category?: Category;
+}
+
+export interface Coupon {
+  _id: string;
+  id?: string;
+  code: string;
+  description: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  minOrder: number;
+  maxDiscount: number | null;
+  isActive: boolean;
+  expiresAt: string | null;
+  usageLimit: number | null;
+  usedCount: number;
+}
+
+export interface OrderItem {
+  _id?: string;
+  menuItemId: string | null;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl: string;
+}
+
+export interface Order {
+  _id: string;
+  id?: string;
+  orderNumber: string;
+  userId: string | null;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  deliveryAddress: string;
+  orderNotes: string;
+  status: OrderStatus;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  items: OrderItem[];
+  subtotal: number;
+  tax: number;
+  deliveryFee: number;
+  discount: number;
+  total: number;
+  couponCode: string;
+  estimatedMinutes: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Review {
+  _id: string;
+  id?: string;
+  userId: string | null;
+  name: string;
+  rating: number;
+  comment: string;
+  isApproved: boolean;
+  createdAt: string;
+}
+
+export interface Payment {
+  _id: string;
+  id?: string;
+  orderId: string;
+  userId: string | null;
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  razorpaySignature: string;
+  amount: number;
+  status: PaymentStatus;
+  createdAt: string;
+  order?: { orderNumber: string; customerName: string; total: number };
+}
+
+export interface RestaurantSettings {
+  _id: string;
+  id?: string;
+  name: string;
+  tagline: string;
+  logoUrl: string;
+  phone: string;
+  email: string;
+  address: string;
+  openingHours: Record<string, string>;
+  isOpen: boolean;
+  deliveryCharge: number;
+  taxRate: number;
+  heroImageUrl: string;
+  storyImageUrl: string;
+  socialLinks: Record<string, string>;
+}
+
+export interface CartItem {
+  menuItem: MenuItem;
+  quantity: number;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: Profile;
+}
