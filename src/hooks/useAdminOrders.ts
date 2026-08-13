@@ -18,16 +18,18 @@ export function useAdminOrders(options: UseAdminOrdersOptions = {}) {
   const loadOrders = useCallback(async () => {
     try {
       const data = await fetchAllOrders();
-
-      if (initializedRef.current) {
-        const newOrder = data.find((order) => !knownIdsRef.current.has(order.id));
-        if (newOrder) onNewOrder?.(newOrder);
-      }
+      const newOrders = initializedRef.current
+        ? data.filter((order) => !knownIdsRef.current.has(order.id))
+        : [];
 
       knownIdsRef.current = new Set(data.map((order) => order.id));
       initializedRef.current = true;
       setOrders(data);
       setError(null);
+
+      for (const order of newOrders) {
+        onNewOrder?.(order);
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to load orders');
     } finally {
