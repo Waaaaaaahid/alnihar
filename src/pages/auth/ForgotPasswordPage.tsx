@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
 import { useToast } from '@/context/ToastContext';
 import Button from '@/components/ui/Button';
 import Logo from '@/components/Logo';
@@ -21,13 +20,22 @@ export default function ForgotPasswordPage() {
     if (!validateEmail(email)) { setError('Invalid email'); return; }
     setError('');
     setLoading(true);
+
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
-      if (error) throw error;
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.message || 'Failed to send reset link');
+      }
+
       setSent(true);
-      showToast('Reset link sent to your email', 'success');
+      showToast('If an account exists, reset instructions have been sent.', 'success');
     } catch (e: any) {
       showToast(e.message || 'Failed to send reset link', 'error');
     } finally {
@@ -43,9 +51,9 @@ export default function ForgotPasswordPage() {
             <Logo />
             <h1 className="mt-6 font-display text-2xl font-bold text-cream-50">Reset Password</h1>
             {sent ? (
-              <p className="mt-1 text-sm text-emerald-400">Check your email for a reset link</p>
+              <p className="mt-1 text-sm text-emerald-400">Check your email for reset instructions</p>
             ) : (
-              <p className="mt-1 text-sm text-ink-300">Enter your email to receive a reset link</p>
+              <p className="mt-1 text-sm text-ink-300">Enter your email to receive reset instructions</p>
             )}
           </div>
 
@@ -53,8 +61,7 @@ export default function ForgotPasswordPage() {
             <div className="flex flex-col items-center gap-4 text-center">
               <CheckCircle2 className="h-16 w-16 text-emerald-400" />
               <p className="text-sm text-ink-300">
-                We've sent a password reset link to <span className="font-semibold text-cream-100">{email}</span>.
-                Check your inbox and follow the link to reset your password.
+                If an account exists for <span className="font-semibold text-cream-100">{email}</span>, you will receive password reset instructions.
               </p>
               <Link to="/login" className="text-sm font-semibold text-ember-400 hover:text-ember-300">
                 Back to sign in
@@ -77,7 +84,7 @@ export default function ForgotPasswordPage() {
                 {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
               </div>
               <Button type="submit" fullWidth size="lg" loading={loading}>
-                Send Reset Link <ArrowRight className="h-4 w-4" />
+                Send Reset Instructions <ArrowRight className="h-4 w-4" />
               </Button>
             </form>
           )}
