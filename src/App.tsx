@@ -7,7 +7,6 @@ import { FullPageLoader } from '@/components/ui/Loader';
 import CustomerLayout from '@/layouts/CustomerLayout';
 import AdminLayout from '@/layouts/AdminLayout';
 
-// Customer pages
 import HomePage from '@/pages/customer/HomePage';
 import MenuPage from '@/pages/customer/MenuPage';
 const CartPage = lazy(() => import('@/pages/customer/CartPage'));
@@ -16,13 +15,11 @@ const TrackOrderPage = lazy(() => import('@/pages/customer/TrackOrderPage'));
 const OrdersPage = lazy(() => import('@/pages/customer/OrdersPage'));
 const ProfilePage = lazy(() => import('@/pages/customer/ProfilePage'));
 
-// Auth pages
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage'));
 
-// Admin pages
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
 const AdminOrderDetailPage = lazy(() => import('@/pages/admin/AdminOrderDetailPage'));
@@ -37,7 +34,7 @@ const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage'));
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
   if (loading) return <FullPageLoader />;
-  if (!session) return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  if (!session) return <Navigate to="/login" state={{ from: window.location.pathname }} replace />;
   return <>{children}</>;
 }
 
@@ -48,25 +45,22 @@ const SuspenseWrap = ({ children }: { children: React.ReactNode }) => (
 function AppRoutes() {
   return (
     <Routes>
-      {/* Auth */}
       <Route path="/login" element={<SuspenseWrap><LoginPage /></SuspenseWrap>} />
       <Route path="/register" element={<SuspenseWrap><RegisterPage /></SuspenseWrap>} />
       <Route path="/forgot-password" element={<SuspenseWrap><ForgotPasswordPage /></SuspenseWrap>} />
       <Route path="/reset-password" element={<SuspenseWrap><ResetPasswordPage /></SuspenseWrap>} />
 
-      {/* Customer */}
       <Route element={<CustomerLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/menu/:category" element={<MenuPage />} />
         <Route path="/cart" element={<SuspenseWrap><CartPage /></SuspenseWrap>} />
-        <Route path="/checkout" element={<SuspenseWrap><CheckoutPage /></SuspenseWrap>} />
+        <Route path="/checkout" element={<SuspenseWrap><ProtectedRoute><CheckoutPage /></ProtectedRoute></SuspenseWrap>} />
         <Route path="/track/:id" element={<SuspenseWrap><TrackOrderPage /></SuspenseWrap>} />
-        <Route path="/orders" element={<SuspenseWrap><OrdersPage /></SuspenseWrap>} />
+        <Route path="/orders" element={<SuspenseWrap><ProtectedRoute><OrdersPage /></ProtectedRoute></SuspenseWrap>} />
         <Route path="/profile" element={<SuspenseWrap><ProtectedRoute><ProfilePage /></ProtectedRoute></SuspenseWrap>} />
       </Route>
 
-      {/* Admin */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<SuspenseWrap><AdminDashboard /></SuspenseWrap>} />
         <Route path="orders" element={<SuspenseWrap><AdminOrdersPage /></SuspenseWrap>} />
@@ -80,7 +74,6 @@ function AppRoutes() {
         <Route path="settings" element={<SuspenseWrap><AdminSettingsPage /></SuspenseWrap>} />
       </Route>
 
-      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
