@@ -1,35 +1,55 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ShoppingBag, IndianRupee, Clock, Flame, CheckCircle2, Users, UtensilsCrossed, ArrowRight,
 } from 'lucide-react';
-import { fetchAdminStats, fetchRecentOrders, fetchSalesData } from '@/lib/api';
+import { fetchAdminStats, fetchSalesData } from '@/lib/api';
+import { useAdminOrders } from '@/hooks/useAdminOrders';
+import { useToast } from '@/context/ToastContext';
 import type { Order } from '@/lib/types';
 import { Loader, ErrorState } from '@/components/ui/Loader';
 import { StatusBadge } from '@/components/ui/Badge';
 import { formatPrice, formatDateTime, cn } from '@/lib/utils';
 
 export default function AdminDashboard() {
+  const { showToast } = useToast();
   const [stats, setStats] = useState<any>(null);
-  const [recent, setRecent] = useState<Order[]>([]);
   const [sales, setSales] = useState<{ date: string; revenue: number; orders: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    Promise.all([fetchAdminStats(), fetchRecentOrders(6), fetchSalesData(7)])
-      .then(([s, r, sales]) => {
-        setStats(s);
-        setRecent(r);
-        setSales(sales);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+  const handleNewOrder = useCallback((order: Order) => {
+    showToast(`New order received: ${order.orderNumber} — ${formatPrice(Number(order.total))}`, 'info');
+  }, [showToast]);
+
+  const { orders, error: ordersError } = useAdminOrders({ onNewOrder: handleNewOrder });
+  const recent = orders.slice(0, 6);
+
+  const refreshDashboard = useCallback(async () => {
+    try {
+      const [s, salesData] = await Promise.all([
+        fetchAdminStats(),
+        fetchSalesData(7),
+      ]);
+      setStats(s);
+      setSales(salesData);
+      setError(null);
+    } catch (e: any) {
+      setError(e.message || 'Failed to load dashboard');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    refreshDashboard();
+    const interval = window.setInterval(refreshDashboard, 5000);
+    return () => window.clearInterval(interval);
+  }, [refreshDashboard]);
+
   if (loading) return <Loader size="lg" className="py-20" />;
-  if (error) return <ErrorState message={error} />;
+  if (error && !stats) return <ErrorState message={error} />;
   if (!stats) return null;
 
   const statCards = [
@@ -43,11 +63,16 @@ export default function AdminDashboard() {
     { label: 'Menu Items', value: stats.totalMenuItems, icon: UtensilsCrossed, color: 'text-pink-400', bg: 'bg-pink-500/10' },
   ];
 
-  const maxSales = Math.max(...sales.map((s) => s.revenue), 1);
+  const maxSales = Math.max(...sales.map((s) => Number(s.revenue) || 0), 1);
 
   return (
     <div className="space-y-6">
-      {/* Stat cards */}
+      {ordersError && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+          Live orders temporarily unavailable. Retrying automatically…
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {statCards.map((card, i) => (
           <motion.div
@@ -69,31 +94,36 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Sales chart */}
         <div className="lg:col-span-2 rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
-          <h2 className="mb-6 font-display text-lg font-bold text-cream-50">Sales (Last 7 Days)</h2>
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-lg font-bold text-cream-50">Sales (Last 7 Days)</h2>
+              <p className="mt-1 text-xs text-ink-400">Live revenue from completed sales data</p>
+            </div>
+          </div>
           <div className="flex h-48 items-end justify-between gap-2">
             {sales.map((day, i) => (
               <div key={day.date} className="flex flex-1 flex-col items-center gap-2">
                 <div className="flex w-full flex-1 items-end">
                   <motion.div
                     initial={{ height: 0 }}
-                    animate={{ height: `${(day.revenue / maxSales) * 100}%` }}
+                    animate={{ height: `${((Number(day.revenue) || 0) / maxSales) * 100}%` }}
                     transition={{ delay: i * 0.08, type: 'spring', stiffness: 100 }}
                     className="w-full rounded-t-lg bg-gradient-to-t from-ember-600 to-ember-400 min-h-[4px]"
                     style={{ minHeight: 4 }}
+                    title={`${formatPrice(Number(day.revenue) || 0)} • ${day.orders} orders`}
                   />
                 </div>
                 <span className="text-[10px] text-ink-400">
                   {new Date(day.date).toLocaleDateString('en', { weekday: 'short' })}
                 </span>
                 <span className="text-[10px] font-medium text-cream-200">{day.orders}</span>
+                <span className="text-[9px] text-ink-400">{formatPrice(Number(day.revenue) || 0)}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Quick stats */}
         <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
           <h2 className="mb-4 font-display text-lg font-bold text-cream-50">Quick Stats</h2>
           <div className="space-y-3">
@@ -123,10 +153,12 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Recent orders */}
       <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-lg font-bold text-cream-50">Recent Orders</h2>
+          <div>
+            <h2 className="font-display text-lg font-bold text-cream-50">Recent Orders</h2>
+            <p className="text-xs text-ink-400">Updates automatically without refresh</p>
+          </div>
           <Link to="/admin/orders" className="text-sm font-medium text-ember-400 hover:text-ember-300">
             View all
           </Link>
@@ -151,7 +183,7 @@ export default function AdminDashboard() {
                     </Link>
                   </td>
                   <td className="py-3 pr-4 text-cream-200">{order.customerName}</td>
-                  <td className="py-3 pr-4 text-ink-300 text-xs">{formatDateTime(order.created_at)}</td>
+                  <td className="py-3 pr-4 text-ink-300 text-xs">{formatDateTime(order.createdAt || order.created_at)}</td>
                   <td className="py-3 pr-4"><StatusBadge status={order.status} /></td>
                   <td className="py-3 pr-4 text-right font-semibold text-cream-50">{formatPrice(Number(order.total))}</td>
                 </tr>
