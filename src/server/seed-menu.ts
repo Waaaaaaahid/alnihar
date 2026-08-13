@@ -34,14 +34,17 @@ const basePrices: Record<string, number> = {
   'Drinks & Beverages': 69,
 };
 
-async function seedMenu() {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) throw new Error('MONGO_URI is not set');
-  await mongoose.connect(mongoUri);
+export async function seedMenuIfEmpty() {
+  const existingItems = await MenuItem.countDocuments();
+  if (existingItems > 0) {
+    return;
+  }
 
-  // This is a menu-only reset for the deployment test dataset.
-  await MenuItem.deleteMany({});
-  await Category.deleteMany({});
+  // Only seed when the menu is empty. Existing menu/order data is never reset on startup.
+  const existingCategories = await Category.countDocuments();
+  if (existingCategories > 0) {
+    await Category.deleteMany({});
+  }
 
   const categories = await Category.insertMany(
     categoryData.map(([name, description, imageUrl], index) => ({
@@ -78,11 +81,17 @@ async function seedMenu() {
   }
 
   await MenuItem.insertMany(items);
-  console.log(`✓ Seeded ${categories.length} categories and ${items.length} menu items`);
-  await mongoose.disconnect();
+  console.log(`✓ Auto-seeded ${categories.length} categories and ${items.length} menu items`);
 }
 
-seedMenu().catch((error) => {
-  console.error('✗ Menu seed failed:', error?.message || error);
-  process.exit(1);
-});
+if (process.argv[1]?.endsWith('seed-menu.ts')) {
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) throw new Error('MONGO_URI is not set');
+  mongoose.connect(mongoUri)
+    .then(seedMenuIfEmpty)
+    .then(() => mongoose.disconnect())
+    .catch((error) => {
+      console.error('✗ Menu seed failed:', error?.message || error);
+      process.exit(1);
+    });
+}
