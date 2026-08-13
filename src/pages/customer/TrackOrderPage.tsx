@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ReceiptText, CheckCheck, Flame, PackageCheck, Bike, Home, XCircle, Clock, MapPin, Phone, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useOrderTracking } from '@/hooks/useOrderTracking';
 import { Loader, ErrorState } from '@/components/ui/Loader';
@@ -37,6 +37,7 @@ export default function TrackOrderPage() {
   const currentStepIndex = FLOW_STATUSES.indexOf(order.status as any);
   const progress = isCancelled ? 0 : ((currentStepIndex + 1) / FLOW_STATUSES.length) * 100;
   const estimatedTime = ESTIMATED_TIMES[order.status] ?? 0;
+  const animateDelivery = deliveryCelebrationShown;
 
   return (
     <div className="container-narrow py-8 lg:py-12">
@@ -46,46 +47,49 @@ export default function TrackOrderPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6 lg:p-8">
-            <div className="mb-8">
-              <div className="mb-3 flex items-center justify-between text-sm"><span className="font-semibold text-cream-100">Order Progress</span>{!isCancelled && estimatedTime > 0 && <span className="flex items-center gap-1.5 text-ember-400"><Clock className="h-4 w-4" /> Est. {estimatedTime} min</span>}</div>
-              <div className="h-2 overflow-hidden rounded-full bg-ink-800"><motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.8, ease: 'easeOut' }} className={cn('h-full rounded-full', isCancelled ? 'bg-red-500' : 'bg-gradient-to-r from-ember-500 to-gold-500')} /></div>
-            </div>
+        <div className="lg:col-span-2 space-y-6">
+          <motion.div layout transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className={cn('overflow-hidden rounded-2xl border bg-ink-900 p-6 lg:p-8', isDelivered ? 'border-ember-500/30' : 'border-ink-700/50')}>
+            <AnimatePresence mode="wait" initial={false}>
+              {!isDelivered ? (
+                <motion.div key="tracking" layout initial={{ opacity: 1 }} exit={{ opacity: 0, y: -10, scale: 0.98 }} transition={{ duration: 0.28, ease: 'easeInOut' }}>
+                  <div className="mb-8">
+                    <div className="mb-3 flex items-center justify-between text-sm"><span className="font-semibold text-cream-100">Order Progress</span>{!isCancelled && estimatedTime > 0 && <span className="flex items-center gap-1.5 text-ember-400"><Clock className="h-4 w-4" /> Est. {estimatedTime} min</span>}</div>
+                    <div className="h-2 overflow-hidden rounded-full bg-ink-800"><motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.8, ease: 'easeOut' }} className={cn('h-full rounded-full', isCancelled ? 'bg-red-500' : 'bg-gradient-to-r from-ember-500 to-gold-500')} /></div>
+                  </div>
 
-            <div className="relative">
-              {isCancelled && <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4"><div className="flex items-center gap-3"><XCircle className="h-6 w-6 text-red-400" /><div><h3 className="font-semibold text-red-400">Order Cancelled</h3><p className="text-sm text-ink-300">This order has been cancelled. Please contact us if you have questions.</p></div></div></div>}
-
-              <div className="space-y-1">
-                {FLOW_STATUSES.map((status, index) => {
-                  const Icon = STATUS_ICONS[status];
-                  const isCompleted = !isCancelled && index <= currentStepIndex;
-                  const isCurrent = !isCancelled && index === currentStepIndex;
-                  const isLast = index === FLOW_STATUSES.length - 1;
-                  return <div key={status} className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: index * 0.1 }} className={cn('flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all', isCompleted && 'border-ember-500 bg-ember-500 text-ink-950', isCurrent && 'border-ember-500 bg-ember-500/20 text-ember-400 animate-pulse-glow', !isCompleted && !isCurrent && 'border-ink-600 bg-ink-800 text-ink-500')}><Icon className="h-5 w-5" /></motion.div>
-                      {!isLast && <div className={cn('w-0.5 h-10', isCompleted ? 'bg-ember-500' : 'bg-ink-700')} />}
+                  <div className="relative">
+                    {isCancelled && <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4"><div className="flex items-center gap-3"><XCircle className="h-6 w-6 text-red-400" /><div><h3 className="font-semibold text-red-400">Order Cancelled</h3><p className="text-sm text-ink-300">This order has been cancelled. Please contact us if you have questions.</p></div></div></div>}
+                    <div className="space-y-1">
+                      {FLOW_STATUSES.map((status, index) => {
+                        const Icon = STATUS_ICONS[status];
+                        const isCompleted = !isCancelled && index <= currentStepIndex;
+                        const isCurrent = !isCancelled && index === currentStepIndex;
+                        const isLast = index === FLOW_STATUSES.length - 1;
+                        return <div key={status} className="flex gap-4">
+                          <div className="flex flex-col items-center">
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: index * 0.1 }} className={cn('flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all', isCompleted && 'border-ember-500 bg-ember-500 text-ink-950', isCurrent && 'border-ember-500 bg-ember-500/20 text-ember-400 animate-pulse-glow', !isCompleted && !isCurrent && 'border-ink-600 bg-ink-800 text-ink-500')}><Icon className="h-5 w-5" /></motion.div>
+                            {!isLast && <div className={cn('w-0.5 h-10', isCompleted ? 'bg-ember-500' : 'bg-ink-700')} />}
+                          </div>
+                          <div className={cn('pb-8', isLast && 'pb-0')}><h3 className={cn('font-semibold transition-colors', isCompleted ? 'text-cream-50' : isCurrent ? 'text-ember-400' : 'text-ink-400')}>{ORDER_STATUS_LABELS[status]}</h3>{isCurrent && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-0.5 text-xs text-ember-400">In progress...</motion.p>}</div>
+                        </div>;
+                      })}
                     </div>
-                    <div className={cn('pb-8', isLast && 'pb-0')}><h3 className={cn('font-semibold transition-colors', isCompleted ? 'text-cream-50' : isCurrent ? 'text-ember-400' : 'text-ink-400')}>{ORDER_STATUS_LABELS[status]}</h3>{isCurrent && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-0.5 text-xs text-ember-400">In progress...</motion.p>}</div>
-                  </div>;
-                })}
-              </div>
-
-              {isDelivered && (
-                <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.55, ease: 'easeOut' }} className="mt-8 overflow-hidden rounded-2xl border border-ember-500/30 bg-gradient-to-br from-ember-500/10 via-ink-800/50 to-gold-500/5 p-6 text-center">
-                  <motion.div initial={{ scale: 0.7, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.15, type: 'spring', stiffness: 180, damping: 12 }} className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-ember-400/40 bg-ember-500/10 text-ember-400 shadow-[0_0_30px_rgba(245,158,11,0.14)]">
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div key="delivered" layout initial={animateDelivery ? { opacity: 0, scale: 0.94, y: 14 } : false} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }} className="py-2 text-center">
+                  <motion.div initial={animateDelivery ? { scale: 0.7, rotate: -8 } : false} animate={{ scale: 1, rotate: 0 }} transition={{ delay: animateDelivery ? 0.08 : 0, type: 'spring', stiffness: 180, damping: 13 }} className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-ember-400/40 bg-ember-500/10 text-ember-400 shadow-[0_0_30px_rgba(245,158,11,0.14)]">
                     <PackageCheck className="h-7 w-7" />
                   </motion.div>
-                  <motion.h3 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mt-4 font-display text-xl font-bold text-cream-50">Order Delivered</motion.h3>
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }} className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-300">Thank you for ordering from AL NIHAR. We hope you enjoyed your meal and look forward to serving you again.</motion.p>
-                  <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.45, duration: 0.5 }} className="mx-auto mt-5 h-px max-w-24 origin-center bg-gradient-to-r from-transparent via-ember-500/60 to-transparent" />
+                  <motion.h3 initial={animateDelivery ? { opacity: 0, y: 8 } : false} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.2 : 0, duration: 0.35 }} className="mt-4 font-display text-xl font-bold text-cream-50">Order Delivered</motion.h3>
+                  <motion.p initial={animateDelivery ? { opacity: 0, y: 6 } : false} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.3 : 0, duration: 0.35 }} className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-300">Thank you for ordering from AL NIHAR. We hope you enjoyed your meal and look forward to serving you again.</motion.p>
+                  <motion.div initial={animateDelivery ? { scaleX: 0, opacity: 0 } : false} animate={{ scaleX: 1, opacity: 1 }} transition={{ delay: animateDelivery ? 0.4 : 0, duration: 0.45 }} className="mx-auto mt-5 h-px max-w-24 origin-center bg-gradient-to-r from-transparent via-ember-500/60 to-transparent" />
                 </motion.div>
               )}
-            </div>
+            </AnimatePresence>
+          </motion.div>
 
-            <div className="mt-6 border-t border-ink-700 pt-6"><h3 className="mb-4 font-semibold text-cream-100">Ordered Items</h3><div className="space-y-3">{order.items?.map((item) => <div key={item.id} className="flex items-center gap-3"><div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-800"><img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" /></div><div className="flex-1"><p className="text-sm font-medium text-cream-100">{item.name}</p><p className="text-xs text-ink-400">{formatPrice(item.price)} × {item.quantity}</p></div><span className="text-sm font-semibold text-cream-50">{formatPrice(item.price * item.quantity)}</span></div>)}</div></div>
-          </div>
+          <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6 lg:p-8"><h3 className="mb-4 font-semibold text-cream-100">Ordered Items</h3><div className="space-y-3">{order.items?.map((item) => <div key={item.id} className="flex items-center gap-3"><div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-800"><img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" /></div><div className="flex-1"><p className="text-sm font-medium text-cream-100">{item.name}</p><p className="text-xs text-ink-400">{formatPrice(item.price)} × {item.quantity}</p></div><span className="text-sm font-semibold text-cream-50">{formatPrice(item.price * item.quantity)}</span></div>)}</div></div>
         </div>
 
         <div className="space-y-4">
