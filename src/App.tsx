@@ -1,11 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { lazy, Suspense, useCallback } from 'react';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { CartProvider } from '@/context/CartContext';
-import { ToastProvider } from '@/context/ToastContext';
+import { ToastProvider, useToast } from '@/context/ToastContext';
 import { FullPageLoader } from '@/components/ui/Loader';
 import CustomerLayout from '@/layouts/CustomerLayout';
 import AdminLayout from '@/layouts/AdminLayout';
+import { useAdminOrders } from '@/hooks/useAdminOrders';
+import type { Order } from '@/lib/types';
+import { formatPrice } from '@/lib/utils';
 
 import HomePage from '@/pages/customer/HomePage';
 import MenuPage from '@/pages/customer/MenuPage';
@@ -36,6 +39,28 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (loading) return <FullPageLoader />;
   if (!session) return <Navigate to="/login" state={{ from: window.location.pathname }} replace />;
   return <>{children}</>;
+}
+
+function GlobalAdminOrderAlerts() {
+  const { profile, loading } = useAuth();
+  const { showToast } = useToast();
+  const location = useLocation();
+
+  const handleNewOrder = useCallback((order: Order) => {
+    showToast(
+      `New order received: ${order.orderNumber} — ${formatPrice(Number(order.total))}`,
+      'info'
+    );
+  }, [showToast]);
+
+  const isAdminPage = location.pathname.startsWith('/admin');
+  const isAdmin = profile?.role === 'admin';
+
+  useAdminOrders({
+    onNewOrder: isAdminPage && isAdmin && !loading ? handleNewOrder : undefined,
+  });
+
+  return null;
 }
 
 const SuspenseWrap = ({ children }: { children: React.ReactNode }) => (
@@ -85,6 +110,7 @@ export default function App() {
       <ToastProvider>
         <CartProvider>
           <BrowserRouter>
+            <GlobalAdminOrderAlerts />
             <AppRoutes />
           </BrowserRouter>
         </CartProvider>
