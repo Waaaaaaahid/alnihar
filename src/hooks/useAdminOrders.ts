@@ -2,15 +2,30 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import type { Order } from '@/lib/types';
 import { fetchAllOrders } from '@/lib/api';
 
-export function useAdminOrders() {
+interface UseAdminOrdersOptions {
+  onNewOrder?: (order: Order) => void;
+}
+
+export function useAdminOrders(options: UseAdminOrdersOptions = {}) {
+  const { onNewOrder } = options;
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const initializedRef = useRef(false);
+  const knownIdsRef = useRef<Set<string>>(new Set());
 
   const loadOrders = useCallback(async () => {
     try {
       const data = await fetchAllOrders();
+
+      if (initializedRef.current) {
+        const newOrder = data.find((order) => !knownIdsRef.current.has(order.id));
+        if (newOrder) onNewOrder?.(newOrder);
+      }
+
+      knownIdsRef.current = new Set(data.map((order) => order.id));
+      initializedRef.current = true;
       setOrders(data);
       setError(null);
     } catch (err: any) {
@@ -18,12 +33,10 @@ export function useAdminOrders() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [onNewOrder]);
 
   useEffect(() => {
     loadOrders();
-
-    // Poll for new orders every 5 seconds (real-time fallback)
     pollingRef.current = setInterval(loadOrders, 5000);
 
     return () => {
