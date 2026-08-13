@@ -87,8 +87,12 @@ export default function AdminDashboard() {
           </div>
           <div className="flex h-56 items-end gap-1 overflow-x-auto pb-1">
             {salesData.map((day, i) => (
-              <div key={day.date} className="flex h-full min-w-[30px] flex-1 flex-col items-center justify-end gap-1">
-                <div className="flex h-full w-full items-end"><motion.div initial={{ height: 0 }} animate={{ height: `${Math.max(4, ((Number(day.revenue) || 0) / maxSales) * 100)}%` }} transition={{ delay: Math.min(i, 12) * 0.03, type: 'spring', stiffness: 100 }} className="w-full rounded-t-md bg-gradient-to-t from-ember-600 to-ember-400" title={`${formatPrice(Number(day.revenue) || 0)} • ${day.orders} orders`} /></div>
+              <div key={day.date} className="group relative flex h-full min-w-[30px] flex-1 cursor-pointer flex-col items-center justify-end gap-1" title={`${formatPrice(Number(day.revenue) || 0)} • ${day.orders} orders`}>
+                <div className="pointer-events-none absolute bottom-7 z-10 hidden min-w-[110px] -translate-y-1 rounded-lg border border-ink-600 bg-ink-950 px-3 py-2 text-center text-xs shadow-xl group-hover:block group-focus-within:block">
+                  <div className="font-semibold text-cream-50">{formatPrice(Number(day.revenue) || 0)}</div>
+                  <div className="mt-0.5 text-[10px] text-ink-400">{day.orders} {day.orders === 1 ? 'order' : 'orders'}</div>
+                </div>
+                <div className="flex h-full w-full items-end"><motion.div initial={{ height: 0 }} animate={{ height: `${Math.max(4, ((Number(day.revenue) || 0) / maxSales) * 100)}%` }} transition={{ delay: Math.min(i, 12) * 0.03, type: 'spring', stiffness: 100 }} className="w-full rounded-t-md bg-gradient-to-t from-ember-600 to-ember-400" /></div>
                 <span className="whitespace-nowrap text-[9px] text-ink-400">{day.label}</span>
               </div>
             ))}
