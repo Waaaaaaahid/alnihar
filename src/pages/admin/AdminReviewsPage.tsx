@@ -37,7 +37,19 @@ export default function AdminReviewsPage() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
+
+  // Keep the Reviews panel live while it is open. New customer reviews,
+  // approvals, visibility changes and deletions appear without a page refresh.
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === 'visible') load();
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, []);
 
   const toggleApprove = async (r: Review) => {
     try {
