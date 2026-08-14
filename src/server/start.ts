@@ -9,8 +9,8 @@ async function start() {
   try {
     await connectDB();
 
-    // Automatically add the 7 categories + 70 menu items
-    // when the MongoDB menu is empty.
+    // Seed the menu when empty and keep the known 70 menu item images fresh
+    // when the existing MongoDB menu is already populated.
     await seedMenuIfEmpty();
 
     app.listen(PORT, '0.0.0.0', () => {
