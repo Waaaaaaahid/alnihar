@@ -28,7 +28,8 @@ export default function TrackOrderPage() {
   const [submitting, setSubmitting] = useState(false);
   const [justSubmitted, setJustSubmitted] = useState(false);
 
-  const isOwner = !!session?.user?.id && !!order && order.userId === session.user.id;
+  // Keep ownership checks resilient to Mongo ObjectId/string serialization differences.
+  const isOwner = !!session?.user?.id && !!order && String(order.userId ?? '') === String(session.user.id);
 
   useEffect(() => {
     if (order?.status === 'delivered') {
@@ -53,15 +54,25 @@ export default function TrackOrderPage() {
   }, [order?.status, isOwner, id]);
 
   const handleSubmitReview = async () => {
-    if (!rating) return;
+    if (!rating || !order) return;
     setSubmitting(true);
     try {
-      await createReview({ orderId: order!.id, rating, comment: comment.trim() });
+      const submittedReview = await createReview({
+        orderId: order.id,
+        rating,
+        comment: comment.trim(),
+      });
+      // Keep the exact server response so the confirmation reflects what was saved.
+      setMyReview(submittedReview);
       setJustSubmitted(true);
     } catch {
-      // Already reviewed or failed — load server state so UI reflects truth
-      const review = await fetchMyOrderReview(order!.id);
-      if (review) { setMyReview(review); setRating(review.rating); setComment(review.comment); }
+      // Already reviewed or failed — load server state so UI reflects truth.
+      const review = await fetchMyOrderReview(order.id);
+      if (review) {
+        setMyReview(review);
+        setRating(review.rating);
+        setComment(review.comment);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -124,7 +135,7 @@ export default function TrackOrderPage() {
                   <motion.p initial={animateDelivery ? { opacity: 0, y: 6 } : false} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.3 : 0, duration: 0.35 }} className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-300">Thank you for ordering from AL NIHAR. We hope you enjoyed your meal and look forward to serving you again.</motion.p>
                   <motion.div initial={animateDelivery ? { scaleX: 0, opacity: 0 } : false} animate={{ scaleX: 1, opacity: 1 }} transition={{ delay: animateDelivery ? 0.4 : 0, duration: 0.45 }} className="mx-auto mt-5 h-px max-w-24 origin-center bg-gradient-to-r from-transparent via-ember-500/60 to-transparent" />
 
-                  {isOwner && order.status === 'delivered' && (
+                  {isOwner && isDelivered && (
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.5 : 0, duration: 0.4 }} className="mt-8 border-t border-ink-700/60 pt-8 text-left">
                       <AnimatePresence mode="wait" initial={false}>
                         {myReview || justSubmitted ? (
@@ -139,7 +150,7 @@ export default function TrackOrderPage() {
                               ))}
                             </div>
                             {myReview?.comment && <p className="mt-3 text-sm leading-6 text-ink-300">"{myReview.comment}"</p>}
-                            <p className="mt-4 text-xs text-ink-400">Your review will appear on the website after admin approval.</p>
+                            <p className="mt-4 text-xs text-ink-400">Your review has been submitted and is waiting for admin approval before it appears in “What People Say”.</p>
                           </motion.div>
                         ) : (
                           <motion.div key="review-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }} className="mx-auto max-w-md">
