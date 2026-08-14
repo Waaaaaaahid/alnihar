@@ -125,6 +125,26 @@ export default function AdminMenuPage() {
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select an image file', 'error');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('Image must be under 2MB', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setForm((p) => ({ ...p, imageUrl: String(reader.result) }));
+      showToast('Image uploaded', 'success');
+    };
+    reader.onerror = () => showToast('Failed to read image', 'error');
+    reader.readAsDataURL(file);
+  };
+
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
@@ -213,19 +233,29 @@ export default function AdminMenuPage() {
           <Textarea label="Description" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} placeholder="Item description" rows={2} />
           <div className="grid grid-cols-2 gap-4">
             <Input label="Price (₹)" type="number" value={form.price} onChange={(e) => setForm((p) => ({ ...p, price: e.target.value }))} placeholder="220" />
-            <Input label="Original Price (₹)" type="number" value={form.originalPrice} onChange={(e) => setForm((p) => ({ ...p, original_price: e.target.value }))} placeholder="280" />
+            <Input label="Original Price (₹)" type="number" value={form.originalPrice} onChange={(e) => setForm((p) => ({ ...p, originalPrice: e.target.value }))} placeholder="280" />
           </div>
-          <Select label="Category" value={form.categoryId} onChange={(e) => setForm((p) => ({ ...p, category_id: e.target.value }))}>
+          <Select label="Category" value={form.categoryId} onChange={(e) => setForm((p) => ({ ...p, categoryId: e.target.value }))}>
             <option value="">No category</option>
             {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </Select>
-          <Input label="Image URL" value={form.imageUrl} onChange={(e) => setForm((p) => ({ ...p, image_url: e.target.value }))} placeholder="https://..." />
+          <Input label="Image URL" value={form.imageUrl} onChange={(e) => setForm((p) => ({ ...p, imageUrl: e.target.value }))} placeholder="https://..." />
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-cream-100">Upload Image from Computer</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="w-full rounded-xl border border-dashed border-ink-600 bg-ink-900 px-4 py-2.5 text-sm text-ink-300 file:mr-3 file:rounded-lg file:border-0 file:bg-ember-500 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-ink-950 hover:border-ember-500 focus:outline-none"
+            />
+            <p className="mt-1 text-xs text-ink-400">Max 2MB. Uploading sets the image shown above.</p>
+          </div>
           {form.imageUrl && (
             <div className="aspect-[4/3] overflow-hidden rounded-xl bg-ink-800">
               <img src={form.imageUrl} alt="Preview" className="h-full w-full object-cover" />
             </div>
           )}
-          <Input label="Sort Order" type="number" value={form.sortOrder} onChange={(e) => setForm((p) => ({ ...p, sort_order: e.target.value }))} />
+          <Input label="Sort Order" type="number" value={form.sortOrder} onChange={(e) => setForm((p) => ({ ...p, sortOrder: e.target.value }))} />
 
           <div className="grid grid-cols-2 gap-3">
             {[
