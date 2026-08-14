@@ -18,6 +18,7 @@ router.post('/', async (req: AuthRequest, res: any) => {
 
     const settings = await RestaurantSettings.findOne();
     if (!settings) return error(res, 'Restaurant settings not configured', 500);
+    if (!settings.isOpen) return error(res, "We're closed right now. Please check back soon.", 403);
 
     const orderItems = [];
     let subtotal = 0;
@@ -188,8 +189,6 @@ router.get('/stats/sales', authMiddleware, adminMiddleware, async (req, res: any
         : created.toISOString().slice(0, 10);
       if (!byBucket[key]) continue;
       byBucket[key].orders += 1;
-      // A completed/delivered COD order is a sale even though paymentStatus remains pending.
-      // Online paid orders count immediately as sales. Cancelled/failed orders were excluded above.
       if (order.status === 'delivered' || order.paymentStatus === 'paid') {
         byBucket[key].revenue += Number(order.total) || 0;
       }
