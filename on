@@ -1,0 +1,227 @@
+[35mpackage-lock.json[m[36m:[m[32m2[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m5[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m8[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m13[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m17[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m22[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m47[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m49[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m51[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m1303[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m1304[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m1372[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m1528[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m1530[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m1531[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m1536[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m1537[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m1543[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m1619[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m1620[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m1629[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m5254[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m5255[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m5261[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m5820[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m5823[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m5825[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m5949[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m5950[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m5965[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35mpackage-lock.json[m[36m:[m[32m6117[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35mpackage-lock.json[m[36m:[m[32m6118[m[36m:[m[1;31m=======[m
+[35mpackage-lock.json[m[36m:[m[32m6139[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/App.tsx[m[36m:[m[32m58[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/App.tsx[m[36m:[m[32m64[m[36m:[m[1;31m=======[m
+[35msrc/App.tsx[m[36m:[m[32m68[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m7[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m13[m[36m:[m[1;31m=======[m
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m18[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m27[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m29[m[36m:[m[1;31m=======[m
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m30[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m50[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m58[m[36m:[m[1;31m=======[m
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m62[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m72[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m74[m[36m:[m[1;31m=======[m
+[35msrc/hooks/useAdminOrders.ts[m[36m:[m[32m76[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/hooks/useSettings.ts[m[36m:[m[32m8[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/hooks/useSettings.ts[m[36m:[m[32m10[m[36m:[m[1;31m=======[m
+[35msrc/hooks/useSettings.ts[m[36m:[m[32m12[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/hooks/useSettings.ts[m[36m:[m[32m17[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/hooks/useSettings.ts[m[36m:[m[32m53[m[36m:[m[1;31m=======[m
+[35msrc/hooks/useSettings.ts[m[36m:[m[32m66[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m12[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m14[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m15[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m20[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m22[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m24[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m35[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m37[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m39[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m56[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m58[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m60[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m84[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m86[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m88[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m113[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m115[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m117[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/lib/types.ts[m[36m:[m[32m128[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/lib/types.ts[m[36m:[m[32m130[m[36m:[m[1;31m=======[m
+[35msrc/lib/types.ts[m[36m:[m[32m132[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m13[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m15[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m17[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m43[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m45[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m47[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m59[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m63[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m67[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m83[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m85[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m87[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m138[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m143[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCategoriesPage.tsx[m[36m:[m[32m148[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m14[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m17[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m20[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m46[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m51[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m56[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m68[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m76[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m84[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m145[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m161[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminCouponsPage.tsx[m[36m:[m[32m177[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminDashboard.tsx[m[36m:[m[32m116[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminDashboard.tsx[m[36m:[m[32m118[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminDashboard.tsx[m[36m:[m[32m120[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m18[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m32[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m46[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m86[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m88[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m90[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m100[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m109[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m118[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m134[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m143[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m152[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m274[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m279[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminMenuPage.tsx[m[36m:[m[32m284[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminOrderDetailPage.tsx[m[36m:[m[32m102[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminOrderDetailPage.tsx[m[36m:[m[32m104[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminOrderDetailPage.tsx[m[36m:[m[32m106[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminOrderDetailPage.tsx[m[36m:[m[32m153[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminOrderDetailPage.tsx[m[36m:[m[32m156[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminOrderDetailPage.tsx[m[36m:[m[32m159[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminOrdersPage.tsx[m[36m:[m[32m103[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminOrdersPage.tsx[m[36m:[m[32m105[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminOrdersPage.tsx[m[36m:[m[32m107[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminPaymentsPage.tsx[m[36m:[m[32m48[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminPaymentsPage.tsx[m[36m:[m[32m50[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminPaymentsPage.tsx[m[36m:[m[32m52[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminReviewsPage.tsx[m[36m:[m[32m29[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminReviewsPage.tsx[m[36m:[m[32m31[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminReviewsPage.tsx[m[36m:[m[32m33[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminReviewsPage.tsx[m[36m:[m[32m75[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminReviewsPage.tsx[m[36m:[m[32m77[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminReviewsPage.tsx[m[36m:[m[32m79[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m31[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m36[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m41[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m47[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m49[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m51[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m78[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m85[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m92[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m116[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m119[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminSettingsPage.tsx[m[36m:[m[32m122[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/admin/AdminUsersPage.tsx[m[36m:[m[32m69[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/admin/AdminUsersPage.tsx[m[36m:[m[32m71[m[36m:[m[1;31m=======[m
+[35msrc/pages/admin/AdminUsersPage.tsx[m[36m:[m[32m73[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/HomePage.tsx[m[36m:[m[32m29[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/HomePage.tsx[m[36m:[m[32m46[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/HomePage.tsx[m[36m:[m[32m56[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/MenuPage.tsx[m[36m:[m[32m25[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/MenuPage.tsx[m[36m:[m[32m40[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/MenuPage.tsx[m[36m:[m[32m48[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/OrdersPage.tsx[m[36m:[m[32m99[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/OrdersPage.tsx[m[36m:[m[32m101[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/OrdersPage.tsx[m[36m:[m[32m103[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m24[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m30[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m36[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m55[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m57[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m59[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m108[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m110[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m112[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m180[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m182[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m184[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m213[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m215[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/ProfilePage.tsx[m[36m:[m[32m217[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/TrackOrderPage.tsx[m[36m:[m[32m46[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/TrackOrderPage.tsx[m[36m:[m[32m48[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/TrackOrderPage.tsx[m[36m:[m[32m50[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/pages/customer/TrackOrderPage.tsx[m[36m:[m[32m96[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/pages/customer/TrackOrderPage.tsx[m[36m:[m[32m98[m[36m:[m[1;31m=======[m
+[35msrc/pages/customer/TrackOrderPage.tsx[m[36m:[m[32m100[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/index.ts[m[36m:[m[32m1[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/index.ts[m[36m:[m[32m6[m[36m:[m[1;31m=======[m
+[35msrc/server/index.ts[m[36m:[m[32m9[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/index.ts[m[36m:[m[32m24[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/index.ts[m[36m:[m[32m26[m[36m:[m[1;31m=======[m
+[35msrc/server/index.ts[m[36m:[m[32m27[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m3[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m5[m[36m:[m[1;31m=======[m
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m6[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m13[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m42[m[36m:[m[1;31m=======[m
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m57[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m66[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m87[m[36m:[m[1;31m=======[m
+[35msrc/server/middleware/auth.ts[m[36m:[m[32m101[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/models/Order.ts[m[36m:[m[32m36[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/models/Order.ts[m[36m:[m[32m39[m[36m:[m[1;31m=======[m
+[35msrc/server/models/Order.ts[m[36m:[m[32m40[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/models/Order.ts[m[36m:[m[32m79[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/models/Order.ts[m[36m:[m[32m80[m[36m:[m[1;31m=======[m
+[35msrc/server/models/Order.ts[m[36m:[m[32m82[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/models/User.ts[m[36m:[m[32m4[m[36m:[m[1;31m<<<<<<<[m HEAD
+[35msrc/server/models/User.ts[m[36m:[m[32m5[m[36m:[m[1;31m=======[m
+[35msrc/server/models/User.ts[m[36m:[m[32m7[m[36m:[m[1;31m>>>>>>>[m 9a922357087256e67fe5d9e2a66ae9a1e58eec70
+[35msrc/server/routes/catalog.ts[m[36m:[m[32m9[m[36m:[m// [1;31m=======[m===== CATEGORIES [1;31m=======[m=====
+[35msrc/server/routes/catalog.ts[m[36m:[m[32m44[m[36m:[m// [1;31m=======[m===== MENU ITEMS [1;31m=======[m=====
+[35msrc/server/routes/data.ts[m[36m:[m[32m12[m[36m:[m// [1;31m=======[m===== COUPONS [1;31m=======[m=====
+[35msrc/server/routes/data.ts[m[36m:[m[32m52[m[36m:[m// [1;31m=======[m===== REVIEWS [1;31m=======[m=====
+[35msrc/server/routes/data.ts[m[36m:[m[32m86[m[36m:[m// [1;31m=======[m===== PAYMENTS [1;31m=======[m=====
+[35msrc/server/routes/data.ts[m[36m:[m[32m94[m[36m:[m// [1;31m=======[m===== USERS (admin) [1;31m=======[m=====
+[35msrc/server/routes/data.ts[m[36m:[m[32m102[m[36m:[m// [1;31m=======[m===== RESTAURANT SETTINGS [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m36[m[36m:[m-- [1;31m=======[m===== PROFILES TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m46[m[36m:[m-- [1;31m=======[m===== CATEGORIES TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m60[m[36m:[m-- [1;31m=======[m===== MENU ITEMS TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m82[m[36m:[m-- [1;31m=======[m===== COUPONS TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m99[m[36m:[m-- [1;31m=======[m===== ORDERS TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m127[m[36m:[m-- [1;31m=======[m===== ORDER ITEMS TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m140[m[36m:[m-- [1;31m=======[m===== REVIEWS TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m153[m[36m:[m-- [1;31m=======[m===== PAYMENTS TABLE [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m168[m[36m:[m-- [1;31m=======[m===== RESTAURANT SETTINGS TABLE (singleton) [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m192[m[36m:[m-- [1;31m=======[m===== IS_ADMIN FUNCTION [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m206[m[36m:[m-- [1;31m=======[m===== AUTO-CREATE PROFILE ON SIGNUP [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m234[m[36m:[m-- [1;31m=======[m===== UPDATED_AT TRIGGER FUNCTION [1;31m=======[m=====
+[35msupabase/migrations/20260813162618_create_al_nihar_schema.sql[m[36m:[m[32m261[m[36m:[m-- [1;31m=======[m===== RLS POLICIES [1;31m=======[m=====
