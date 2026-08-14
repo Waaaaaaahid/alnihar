@@ -33,8 +33,11 @@ export interface IOrder extends Document {
   total: number;
   couponCode: string;
   estimatedMinutes: number;
+<<<<<<< HEAD
   createdAt: Date;
   updatedAt: Date;
+=======
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -73,6 +76,10 @@ const OrderSchema = new Schema<IOrder>(
   { timestamps: true },
 );
 
+<<<<<<< HEAD
+=======
+OrderSchema.index({ orderNumber: 1 });
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 OrderSchema.index({ status: 1 });
 OrderSchema.index({ createdAt: -1 });
 

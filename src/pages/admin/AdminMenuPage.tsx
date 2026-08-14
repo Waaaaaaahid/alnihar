@@ -15,6 +15,7 @@ interface EditForm {
   name: string;
   description: string;
   price: string;
+<<<<<<< HEAD
   originalPrice: string;
   categoryId: string;
   imageUrl: string;
@@ -28,6 +29,21 @@ interface EditForm {
 const emptyForm: EditForm = {
   name: '', description: '', price: '', originalPrice: '', categoryId: '',
   imageUrl: '', isAvailable: true, isBestseller: false, isFeatured: false, isSpicy: false, sortOrder: '0',
+=======
+  original_price: string;
+  category_id: string;
+  image_url: string;
+  is_available: boolean;
+  is_bestseller: boolean;
+  is_featured: boolean;
+  is_spicy: boolean;
+  sort_order: string;
+}
+
+const emptyForm: EditForm = {
+  name: '', description: '', price: '', original_price: '', category_id: '',
+  image_url: '', is_available: true, is_bestseller: false, is_featured: false, is_spicy: false, sort_order: '0',
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 };
 
 export default function AdminMenuPage() {
@@ -67,7 +83,11 @@ export default function AdminMenuPage() {
 
   const openCreate = () => {
     setEditing(null);
+<<<<<<< HEAD
     setForm({ ...emptyForm, categoryId: categories[0]?.id || '' });
+=======
+    setForm({ ...emptyForm, category_id: categories[0]?.id || '' });
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     setModalOpen(true);
   };
 
@@ -77,6 +97,7 @@ export default function AdminMenuPage() {
       name: item.name,
       description: item.description,
       price: String(item.price),
+<<<<<<< HEAD
       originalPrice: item.originalPrice ? String(item.originalPrice) : '',
       categoryId: item.categoryId || '',
       imageUrl: item.imageUrl,
@@ -85,6 +106,16 @@ export default function AdminMenuPage() {
       isFeatured: item.isFeatured,
       isSpicy: item.isSpicy,
       sortOrder: String(item.sortOrder),
+=======
+      original_price: item.originalPrice ? String(item.originalPrice) : '',
+      category_id: item.categoryId || '',
+      image_url: item.imageUrl,
+      is_available: item.isAvailable,
+      is_bestseller: item.isBestseller,
+      is_featured: item.isFeatured,
+      is_spicy: item.isSpicy,
+      sort_order: String(item.sortOrder),
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     });
     setModalOpen(true);
   };
@@ -100,6 +131,7 @@ export default function AdminMenuPage() {
         name: form.name.trim(),
         description: form.description.trim(),
         price: parseFloat(form.price) || 0,
+<<<<<<< HEAD
         originalPrice: form.originalPrice ? parseFloat(form.originalPrice) : null,
         categoryId: form.categoryId || null,
         imageUrl: form.imageUrl.trim(),
@@ -108,6 +140,16 @@ export default function AdminMenuPage() {
         isFeatured: form.isFeatured,
         isSpicy: form.isSpicy,
         sortOrder: parseInt(form.sortOrder) || 0,
+=======
+        original_price: form.originalPrice ? parseFloat(form.originalPrice) : null,
+        category_id: form.categoryId || null,
+        image_url: form.imageUrl.trim(),
+        is_available: form.isAvailable,
+        is_bestseller: form.isBestseller,
+        is_featured: form.isFeatured,
+        is_spicy: form.isSpicy,
+        sort_order: parseInt(form.sortOrder) || 0,
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
       };
       if (editing) {
         await updateMenuItem(editing.id, data);
@@ -229,10 +271,17 @@ export default function AdminMenuPage() {
 
           <div className="grid grid-cols-2 gap-3">
             {[
+<<<<<<< HEAD
               { key: 'isAvailable', label: 'Available' },
               { key: 'isBestseller', label: 'Bestseller' },
               { key: 'isFeatured', label: 'Featured' },
               { key: 'isSpicy', label: 'Spicy' },
+=======
+              { key: 'is_available', label: 'Available' },
+              { key: 'is_bestseller', label: 'Bestseller' },
+              { key: 'is_featured', label: 'Featured' },
+              { key: 'is_spicy', label: 'Spicy' },
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
             ].map((toggle) => (
               <button
                 key={toggle.key}

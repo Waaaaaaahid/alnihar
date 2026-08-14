@@ -5,11 +5,16 @@ import { fetchSettings } from '@/lib/api';
 let cachedSettings: RestaurantSettings | null = null;
 let fetchPromise: Promise<RestaurantSettings | null> | null = null;
 
+<<<<<<< HEAD
 export function useSettings(pollMs = 30000) {
+=======
+export function useSettings() {
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   const [settings, setSettings] = useState<RestaurantSettings | null>(cachedSettings);
   const [loading, setLoading] = useState(!cachedSettings);
 
   useEffect(() => {
+<<<<<<< HEAD
     let active = true;
 
     const load = () => {
@@ -45,6 +50,20 @@ export function useSettings(pollMs = 30000) {
       clearInterval(interval);
     };
   }, [pollMs]);
+=======
+    if (cachedSettings) return;
+    if (!fetchPromise) {
+      fetchPromise = fetchSettings().then((s) => {
+        cachedSettings = s;
+        return s;
+      });
+    }
+    fetchPromise.then((s) => {
+      setSettings(s);
+      setLoading(false);
+    });
+  }, []);
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 
   return { settings, loading };
 }

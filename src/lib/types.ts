@@ -9,12 +9,19 @@ export interface Profile {
   email: string;
   phone: string;
   role: UserRole;
+<<<<<<< HEAD
   createdAt?: string;
+=======
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 }
 
 export interface Category {
   _id: string;
+<<<<<<< HEAD
   id: string;
+=======
+  id?: string;
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   name: string;
   slug: string;
   description: string;
@@ -25,7 +32,11 @@ export interface Category {
 
 export interface MenuItem {
   _id: string;
+<<<<<<< HEAD
   id: string;
+=======
+  id?: string;
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   name: string;
   description: string;
   price: number;
@@ -42,7 +53,11 @@ export interface MenuItem {
 
 export interface Coupon {
   _id: string;
+<<<<<<< HEAD
   id: string;
+=======
+  id?: string;
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   code: string;
   description: string;
   discountType: 'percentage' | 'fixed';
@@ -66,7 +81,11 @@ export interface OrderItem {
 
 export interface Order {
   _id: string;
+<<<<<<< HEAD
   id: string;
+=======
+  id?: string;
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   orderNumber: string;
   userId: string | null;
   customerName: string;
@@ -91,7 +110,11 @@ export interface Order {
 
 export interface Review {
   _id: string;
+<<<<<<< HEAD
   id: string;
+=======
+  id?: string;
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   userId: string | null;
   name: string;
   rating: number;
@@ -102,7 +125,11 @@ export interface Review {
 
 export interface Payment {
   _id: string;
+<<<<<<< HEAD
   id: string;
+=======
+  id?: string;
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   orderId: string;
   userId: string | null;
   razorpayOrderId: string;

@@ -99,7 +99,11 @@ export default function AdminOrderDetailPage() {
         <StatusBadge status={order.status} />
         <StatusBadge status={order.paymentStatus} />
       </div>
+<<<<<<< HEAD
       <p className="text-sm text-ink-300">{formatDateTime(order.createdAt)}</p>
+=======
+      <p className="text-sm text-ink-300">{formatDateTime(order.created_at)}</p>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Order items + status management */}
@@ -146,8 +150,13 @@ export default function AdminOrderDetailPage() {
           <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
             <h2 className="mb-4 font-display text-lg font-bold text-cream-50">Ordered Items</h2>
             <div className="space-y-3">
+<<<<<<< HEAD
               {order.items?.map((item, index) => (
                 <div key={item._id || `${item.menuItemId}-${index}`} className="flex items-center gap-4 rounded-xl bg-ink-800/50 p-3">
+=======
+              {order.items?.map((item) => (
+                <div key={item.id} className="flex items-center gap-4 rounded-xl bg-ink-800/50 p-3">
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-ink-800">
                     <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />
                   </div>

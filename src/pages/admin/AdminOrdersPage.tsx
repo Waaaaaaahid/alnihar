@@ -100,7 +100,11 @@ export default function AdminOrdersPage() {
                     <div className="text-xs text-ink-400">{order.customerPhone}</div>
                   </td>
                   <td className="px-4 py-3 text-ink-300 text-xs">{order.items?.length || '—'}</td>
+<<<<<<< HEAD
                   <td className="px-4 py-3 text-ink-300 text-xs">{formatDateTime(order.createdAt)}</td>
+=======
+                  <td className="px-4 py-3 text-ink-300 text-xs">{formatDateTime(order.created_at)}</td>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                   <td className="px-4 py-3"><StatusBadge status={order.status} /></td>
                   <td className="px-4 py-3"><StatusBadge status={order.paymentStatus} /></td>
                   <td className="px-4 py-3 text-right font-semibold text-cream-50">{formatPrice(Number(order.total))}</td>

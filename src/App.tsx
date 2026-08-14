@@ -55,11 +55,17 @@ function GlobalAdminOrderAlerts() {
 
   const isAdminPage = location.pathname.startsWith('/admin');
   const isAdmin = profile?.role === 'admin';
+<<<<<<< HEAD
   const alertsEnabled = isAdminPage && isAdmin && !loading;
 
   useAdminOrders({
     enabled: alertsEnabled,
     onNewOrder: alertsEnabled ? handleNewOrder : undefined,
+=======
+
+  useAdminOrders({
+    onNewOrder: isAdminPage && isAdmin && !loading ? handleNewOrder : undefined,
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   });
 
   return null;

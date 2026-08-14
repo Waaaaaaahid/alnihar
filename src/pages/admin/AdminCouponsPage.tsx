@@ -11,8 +11,13 @@ import { useToast } from '@/context/ToastContext';
 import { formatPrice, formatDate, cn } from '@/lib/utils';
 
 const emptyForm = {
+<<<<<<< HEAD
   code: '', description: '', discountType: 'percentage', discountValue: '',
   minOrder: '0', maxDiscount: '', isActive: true, expiresAt: '', usageLimit: '',
+=======
+  code: '', description: '', discount_type: 'percentage', discount_value: '',
+  min_order: '0', max_discount: '', is_active: true, expires_at: '', usage_limit: '',
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 };
 
 export default function AdminCouponsPage() {
@@ -38,10 +43,17 @@ export default function AdminCouponsPage() {
   const openEdit = (c: Coupon) => {
     setEditing(c);
     setForm({
+<<<<<<< HEAD
       code: c.code, description: c.description, discountType: c.discountType,
       discountValue: String(c.discountValue), minOrder: String(c.minOrder),
       maxDiscount: c.maxDiscount ? String(c.maxDiscount) : '', isActive: c.isActive,
       expiresAt: c.expiresAt ? c.expiresAt.slice(0, 10) : '', usageLimit: c.usageLimit ? String(c.usageLimit) : '',
+=======
+      code: c.code, description: c.description, discount_type: c.discountType,
+      discount_value: String(c.discountValue), min_order: String(c.minOrder),
+      max_discount: c.maxDiscount ? String(c.maxDiscount) : '', is_active: c.isActive,
+      expires_at: c.expiresAt ? c.expiresAt.slice(0, 10) : '', usage_limit: c.usageLimit ? String(c.usageLimit) : '',
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     });
     setModalOpen(true);
   };
@@ -53,6 +65,7 @@ export default function AdminCouponsPage() {
       const data = {
         code: form.code.toUpperCase(),
         description: form.description.trim(),
+<<<<<<< HEAD
         discountType: form.discountType as 'percentage' | 'fixed',
         discountValue: parseFloat(form.discountValue) || 0,
         minOrder: parseFloat(form.minOrder) || 0,
@@ -60,6 +73,15 @@ export default function AdminCouponsPage() {
         isActive: form.isActive,
         expiresAt: form.expiresAt ? new Date(form.expiresAt).toISOString() : null,
         usageLimit: form.usageLimit ? parseInt(form.usageLimit) : null,
+=======
+        discount_type: form.discountType as 'percentage' | 'fixed',
+        discount_value: parseFloat(form.discountValue) || 0,
+        min_order: parseFloat(form.minOrder) || 0,
+        max_discount: form.maxDiscount ? parseFloat(form.maxDiscount) : null,
+        is_active: form.isActive,
+        expires_at: form.expiresAt ? new Date(form.expiresAt).toISOString() : null,
+        usage_limit: form.usageLimit ? parseInt(form.usageLimit) : null,
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
       };
       if (editing) { await updateCoupon(editing.id, data); showToast('Coupon updated', 'success'); }
       else { await createCoupon(data); showToast('Coupon created', 'success'); }
@@ -120,6 +142,7 @@ export default function AdminCouponsPage() {
           <Input label="Coupon Code" value={form.code} onChange={(e) => setForm((p) => ({ ...p, code: e.target.value.toUpperCase() }))} placeholder="NIHAR10" />
           <Input label="Description" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} placeholder="10% off your order" />
           <div className="grid grid-cols-2 gap-4">
+<<<<<<< HEAD
             <Select label="Discount Type" value={form.discountType} onChange={(e) => setForm((p) => ({ ...p, discountType: e.target.value }))}>
               <option value="percentage">Percentage</option>
               <option value="fixed">Fixed Amount</option>
@@ -135,6 +158,23 @@ export default function AdminCouponsPage() {
             <Input label="Usage Limit" type="number" value={form.usageLimit} onChange={(e) => setForm((p) => ({ ...p, usageLimit: e.target.value }))} placeholder="Optional" />
           </div>
           <button onClick={() => setForm((p) => ({ ...p, isActive: !p.isActive }))} className={cn('flex items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium', form.isActive ? 'border-ember-500 bg-ember-500/10 text-ember-400' : 'border-ink-600 text-ink-300')}>
+=======
+            <Select label="Discount Type" value={form.discountType} onChange={(e) => setForm((p) => ({ ...p, discount_type: e.target.value }))}>
+              <option value="percentage">Percentage</option>
+              <option value="fixed">Fixed Amount</option>
+            </Select>
+            <Input label="Discount Value" type="number" value={form.discountValue} onChange={(e) => setForm((p) => ({ ...p, discount_value: e.target.value }))} placeholder="10" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Min Order (₹)" type="number" value={form.minOrder} onChange={(e) => setForm((p) => ({ ...p, min_order: e.target.value }))} />
+            <Input label="Max Discount (₹)" type="number" value={form.maxDiscount} onChange={(e) => setForm((p) => ({ ...p, max_discount: e.target.value }))} placeholder="Optional" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Expires At" type="date" value={form.expiresAt} onChange={(e) => setForm((p) => ({ ...p, expires_at: e.target.value }))} />
+            <Input label="Usage Limit" type="number" value={form.usageLimit} onChange={(e) => setForm((p) => ({ ...p, usage_limit: e.target.value }))} placeholder="Optional" />
+          </div>
+          <button onClick={() => setForm((p) => ({ ...p, is_active: !p.isActive }))} className={cn('flex items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium', form.isActive ? 'border-ember-500 bg-ember-500/10 text-ember-400' : 'border-ink-600 text-ink-300')}>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
             Active
             <div className={cn('h-5 w-9 rounded-full p-0.5', form.isActive ? 'bg-ember-500' : 'bg-ink-700')}><div className={cn('h-4 w-4 rounded-full bg-white transition-transform', form.isActive && 'translate-x-4')} /></div>
           </button>

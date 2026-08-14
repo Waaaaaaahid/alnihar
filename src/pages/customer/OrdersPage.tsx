@@ -96,7 +96,11 @@ export default function OrdersPage() {
                         <span className="font-mono text-sm font-semibold text-cream-50">{order.orderNumber}</span>
                         <StatusBadge status={order.status} />
                       </div>
+<<<<<<< HEAD
                       <p className="mt-1 text-xs text-ink-400">{formatDateTime(order.createdAt)}</p>
+=======
+                      <p className="mt-1 text-xs text-ink-400">{formatDateTime(order.created_at)}</p>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-cream-50">{formatPrice(Number(order.total))}</div>

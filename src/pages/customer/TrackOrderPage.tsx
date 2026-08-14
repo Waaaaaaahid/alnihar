@@ -43,7 +43,11 @@ export default function TrackOrderPage() {
     <div className="container-narrow py-8 lg:py-12">
       <div className="mb-8">
         <div className="flex flex-wrap items-center gap-3"><h1 className="font-display text-display-lg font-bold text-cream-50">Track Order</h1><StatusBadge status={order.status} /></div>
+<<<<<<< HEAD
         <p className="mt-2 text-sm text-ink-300">Order <span className="font-mono font-semibold text-cream-200">{order.orderNumber}</span> · {formatDateTime(order.createdAt)}</p>
+=======
+        <p className="mt-2 text-sm text-ink-300">Order <span className="font-mono font-semibold text-cream-200">{order.orderNumber}</span> · {formatDateTime(order.created_at)}</p>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -89,7 +93,11 @@ export default function TrackOrderPage() {
             </AnimatePresence>
           </motion.div>
 
+<<<<<<< HEAD
           <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6 lg:p-8"><h3 className="mb-4 font-semibold text-cream-100">Ordered Items</h3><div className="space-y-3">{order.items?.map((item, i) => <div key={item._id || i} className="flex items-center gap-3"><div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-800"><img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" /></div><div className="flex-1"><p className="text-sm font-medium text-cream-100">{item.name}</p><p className="text-xs text-ink-400">{formatPrice(item.price)} × {item.quantity}</p></div><span className="text-sm font-semibold text-cream-50">{formatPrice(item.price * item.quantity)}</span></div>)}</div></div>
+=======
+          <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6 lg:p-8"><h3 className="mb-4 font-semibold text-cream-100">Ordered Items</h3><div className="space-y-3">{order.items?.map((item) => <div key={item.id} className="flex items-center gap-3"><div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-800"><img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" /></div><div className="flex-1"><p className="text-sm font-medium text-cream-100">{item.name}</p><p className="text-xs text-ink-400">{formatPrice(item.price)} × {item.quantity}</p></div><span className="text-sm font-semibold text-cream-50">{formatPrice(item.price * item.quantity)}</span></div>)}</div></div>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
         </div>
 
         <div className="space-y-4">

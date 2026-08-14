@@ -10,7 +10,11 @@ import Modal from '@/components/ui/Modal';
 import { useToast } from '@/context/ToastContext';
 import { slugify, cn } from '@/lib/utils';
 
+<<<<<<< HEAD
 const emptyForm = { name: '', description: '', imageUrl: '', isActive: true, sortOrder: '0' };
+=======
+const emptyForm = { name: '', description: '', image_url: '', is_active: true, sort_order: '0' };
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 
 export default function AdminCategoriesPage() {
   const { showToast } = useToast();
@@ -36,7 +40,11 @@ export default function AdminCategoriesPage() {
   const openCreate = () => { setEditing(null); setForm(emptyForm); setModalOpen(true); };
   const openEdit = (cat: Category) => {
     setEditing(cat);
+<<<<<<< HEAD
     setForm({ name: cat.name, description: cat.description, imageUrl: cat.imageUrl, isActive: cat.isActive, sortOrder: String(cat.sortOrder) });
+=======
+    setForm({ name: cat.name, description: cat.description, image_url: cat.imageUrl, is_active: cat.isActive, sort_order: String(cat.sortOrder) });
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     setModalOpen(true);
   };
 
@@ -48,9 +56,15 @@ export default function AdminCategoriesPage() {
         name: form.name.trim(),
         slug: slugify(form.name),
         description: form.description.trim(),
+<<<<<<< HEAD
         imageUrl: form.imageUrl.trim(),
         isActive: form.isActive,
         sortOrder: parseInt(form.sortOrder) || 0,
+=======
+        image_url: form.imageUrl.trim(),
+        is_active: form.isActive,
+        sort_order: parseInt(form.sortOrder) || 0,
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
       };
       if (editing) { await updateCategory(editing.id, data); showToast('Category updated', 'success'); }
       else { await createCategory(data); showToast('Category created', 'success'); }
@@ -66,7 +80,11 @@ export default function AdminCategoriesPage() {
   };
 
   const toggleActive = async (cat: Category) => {
+<<<<<<< HEAD
     try { await updateCategory(cat.id, { isActive: !cat.isActive }); load(); }
+=======
+    try { await updateCategory(cat.id, { is_active: !cat.isActive }); load(); }
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     catch (e: any) { showToast(e.message, 'error'); }
   };
 
@@ -117,10 +135,17 @@ export default function AdminCategoriesPage() {
         <div className="space-y-4 p-6">
           <Input label="Name" value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="e.g. Premium Burgers" />
           <Textarea label="Description" value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} rows={2} />
+<<<<<<< HEAD
           <Input label="Image URL" value={form.imageUrl} onChange={(e) => setForm((p) => ({ ...p, imageUrl: e.target.value }))} placeholder="https://..." />
           {form.imageUrl && <div className="aspect-[4/3] overflow-hidden rounded-xl bg-ink-800"><img src={form.imageUrl} alt="Preview" className="h-full w-full object-cover" /></div>}
           <Input label="Sort Order" type="number" value={form.sortOrder} onChange={(e) => setForm((p) => ({ ...p, sortOrder: e.target.value }))} />
           <button onClick={() => setForm((p) => ({ ...p, isActive: !p.isActive }))} className={cn('flex items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium', form.isActive ? 'border-ember-500 bg-ember-500/10 text-ember-400' : 'border-ink-600 text-ink-300')}>
+=======
+          <Input label="Image URL" value={form.imageUrl} onChange={(e) => setForm((p) => ({ ...p, image_url: e.target.value }))} placeholder="https://..." />
+          {form.imageUrl && <div className="aspect-[4/3] overflow-hidden rounded-xl bg-ink-800"><img src={form.imageUrl} alt="Preview" className="h-full w-full object-cover" /></div>}
+          <Input label="Sort Order" type="number" value={form.sortOrder} onChange={(e) => setForm((p) => ({ ...p, sort_order: e.target.value }))} />
+          <button onClick={() => setForm((p) => ({ ...p, is_active: !p.isActive }))} className={cn('flex items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium', form.isActive ? 'border-ember-500 bg-ember-500/10 text-ember-400' : 'border-ink-600 text-ink-300')}>
+>>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
             Active (visible to customers)
             <div className={cn('h-5 w-9 rounded-full p-0.5', form.isActive ? 'bg-ember-500' : 'bg-ink-700')}>
               <div className={cn('h-4 w-4 rounded-full bg-white transition-transform', form.isActive && 'translate-x-4')} />
