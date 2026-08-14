@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ShoppingBag, Banknote, CreditCard, Loader2, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ShoppingBag, Banknote, CreditCard, Loader2, CheckCircle2, LockKeyhole } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useSettings } from '@/hooks/useSettings';
@@ -43,6 +43,7 @@ export default function CheckoutPage() {
   }, [profile, session]);
 
   const totals = calculateOrderTotals(items, settings, coupon);
+  const restaurantClosed = settings !== null && !settings.isOpen;
 
   const update = (field: keyof typeof form, value: string) => {
     setForm((p) => ({ ...p, [field]: value }));
@@ -62,6 +63,10 @@ export default function CheckoutPage() {
   };
 
   const handleSubmit = async () => {
+    if (restaurantClosed) {
+      showToast("We're closed right now. Please check back soon.", 'error');
+      return;
+    }
     if (!session) {
       showToast('Please login before placing an order', 'error');
       navigate('/login', { state: { from: '/checkout' } });
@@ -107,6 +112,16 @@ export default function CheckoutPage() {
       <Link to="/cart" className="mb-6 inline-flex items-center gap-2 text-sm text-ink-400 hover:text-cream-100"><ArrowLeft className="h-4 w-4" /> Back to cart</Link>
       <h1 className="font-display text-display-lg font-bold text-cream-50">Checkout</h1>
 
+      {restaurantClosed && (
+        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-ember-500/20 bg-ember-500/10 p-4 text-ember-300">
+          <LockKeyhole className="mt-0.5 h-5 w-5 shrink-0" />
+          <div>
+            <p className="text-sm font-semibold text-cream-50">We're Closed Right Now</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink-300">We're not accepting orders at the moment. Please check back soon.</p>
+          </div>
+        </div>
+      )}
+
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
@@ -127,12 +142,12 @@ export default function CheckoutPage() {
           <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
             <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-cream-50"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-ember-500 text-xs font-bold text-ink-950">3</span>Payment Method</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <button onClick={() => update('paymentMethod', 'cod')} className={cn('flex items-center gap-3 rounded-xl border p-4 text-left transition-all', form.paymentMethod === 'cod' ? 'border-ember-500 bg-ember-500/10' : 'border-ink-600 hover:border-ink-500')}>
+              <button disabled={restaurantClosed} onClick={() => update('paymentMethod', 'cod')} className={cn('flex items-center gap-3 rounded-xl border p-4 text-left transition-all disabled:cursor-not-allowed disabled:opacity-50', form.paymentMethod === 'cod' ? 'border-ember-500 bg-ember-500/10' : 'border-ink-600 hover:border-ink-500')}>
                 <div className={cn('flex h-10 w-10 items-center justify-center rounded-xl', form.paymentMethod === 'cod' ? 'bg-ember-500 text-ink-950' : 'bg-ink-800 text-ink-300')}><Banknote className="h-5 w-5" /></div>
                 <div><div className="text-sm font-semibold text-cream-100">Cash on Delivery</div><div className="text-xs text-ink-300">Pay when you receive</div></div>
                 {form.paymentMethod === 'cod' && <CheckCircle2 className="ml-auto h-5 w-5 text-ember-500" />}
               </button>
-              <button onClick={() => update('paymentMethod', 'razorpay')} className={cn('flex items-center gap-3 rounded-xl border p-4 text-left transition-all', form.paymentMethod === 'razorpay' ? 'border-ember-500 bg-ember-500/10' : 'border-ink-600 hover:border-ink-500')}>
+              <button disabled={restaurantClosed} onClick={() => update('paymentMethod', 'razorpay')} className={cn('flex items-center gap-3 rounded-xl border p-4 text-left transition-all disabled:cursor-not-allowed disabled:opacity-50', form.paymentMethod === 'razorpay' ? 'border-ember-500 bg-ember-500/10' : 'border-ink-600 hover:border-ink-500')}>
                 <div className={cn('flex h-10 w-10 items-center justify-center rounded-xl', form.paymentMethod === 'razorpay' ? 'bg-ember-500 text-ink-950' : 'bg-ink-800 text-ink-300')}><CreditCard className="h-5 w-5" /></div>
                 <div><div className="text-sm font-semibold text-cream-100">Online Payment</div><div className="text-xs text-ink-300">Pay via card/UPI</div></div>
                 {form.paymentMethod === 'razorpay' && <CheckCircle2 className="ml-auto h-5 w-5 text-ember-500" />}
@@ -163,7 +178,7 @@ export default function CheckoutPage() {
             </div>
             <div className="my-4 h-px bg-ink-700" />
             <div className="flex items-baseline justify-between"><span className="font-semibold text-cream-100">Total</span><span className="font-display text-2xl font-bold text-cream-50">{formatPrice(totals.total)}</span></div>
-            <Button fullWidth size="lg" className="mt-6" onClick={handleSubmit} disabled={submitting}>{submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Placing Order...</> : <>Place Order <ArrowRight className="h-4 w-4" /></>}</Button>
+            <Button fullWidth size="lg" className="mt-6" onClick={handleSubmit} disabled={submitting || restaurantClosed}>{restaurantClosed ? <><LockKeyhole className="h-4 w-4" /> We're Closed Right Now</> : submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Placing Order...</> : <>Place Order <ArrowRight className="h-4 w-4" /></>}</Button>
           </div>
         </div>
       </div>
