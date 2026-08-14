@@ -34,13 +34,60 @@ const basePrices: Record<string, number> = {
   'Drinks & Beverages': 69,
 };
 
+/**
+ * Generates one deterministic, item-specific food image URL.
+ * The prompt is built from the exact menu item/category so items never
+ * intentionally fall back to the category's single generic image.
+ */
+function aiFoodImage(name: string, category: string): string {
+  const prompt = [
+    `ultra realistic professional food photography of ${name}`,
+    `category ${category}`,
+    'restaurant menu hero shot',
+    'the exact food named in the prompt, appetizing and freshly prepared',
+    'hyper realistic natural food textures, realistic ingredients, realistic steam and highlights where appropriate',
+    'premium commercial food photography, cinematic soft lighting, shallow depth of field',
+    'clean premium restaurant presentation, no people, no hands',
+    'no text, no letters, no logo, no branding, no watermark, no packaging labels',
+    'photorealistic, extremely detailed, sharp focus, 4K quality',
+  ].join(', ');
+
+  const seed = Array.from(name).reduce((hash, char) => ((hash * 31 + char.charCodeAt(0)) >>> 0), 2166136261);
+  return `https://pollinations.ai/p/${encodeURIComponent(prompt)}?model=flux&width=1536&height=1024&seed=${seed}&nologo=true&enhance=true`;
+}
+
+const allSeedItemNames = Object.values(itemNames).flat();
+
+/**
+ * Existing installations already have menu rows, so changing the seed data
+ * alone would not update their images. This migration updates only imageUrl
+ * for the known seeded menu items and leaves prices, orders, availability,
+ * reviews, categories, and every other field untouched.
+ */
+export async function updateMenuItemImages() {
+  const operations = allSeedItemNames.map((name) => ({
+    updateMany: {
+      filter: { name },
+      update: { $set: { imageUrl: aiFoodImage(name, Object.entries(itemNames).find(([, names]) => names.includes(name))?.[0] || 'Food') } },
+    },
+  }));
+
+  if (operations.length > 0) {
+    await MenuItem.bulkWrite(operations, { ordered: false });
+    console.log(`✓ Updated unique food images for ${allSeedItemNames.length} menu items`);
+  }
+}
+
 export async function seedMenuIfEmpty() {
   const existingItems = await MenuItem.countDocuments();
+
+  // Existing AL NIHAR installations need their current 70 menu images updated
+  // too. Do this before returning, without deleting/recreating menu data.
   if (existingItems > 0) {
+    await updateMenuItemImages();
     return;
   }
 
-  // Only seed when the menu is empty. Existing menu/order data is never reset on startup.
   const existingCategories = await Category.countDocuments();
   if (existingCategories > 0) {
     await Category.deleteMany({});
@@ -57,7 +104,9 @@ export async function seedMenuIfEmpty() {
     })),
   );
 
-  const categoryMap = new Map<string, mongoose.Types.ObjectId>(categories.map((category) => [category.name, category._id as mongoose.Types.ObjectId]));
+  const categoryMap = new Map<string, mongoose.Types.ObjectId>(
+    categories.map((category) => [category.name, category._id as mongoose.Types.ObjectId]),
+  );
   const items: any[] = [];
 
   for (const [categoryName, names] of Object.entries(itemNames)) {
@@ -70,7 +119,7 @@ export async function seedMenuIfEmpty() {
         price,
         originalPrice: index % 3 === 0 ? price + 30 : null,
         categoryId,
-        imageUrl: categoryData.find((c) => c[0] === categoryName)?.[2] || '',
+        imageUrl: aiFoodImage(name, categoryName),
         isAvailable: true,
         isBestseller: index < 2,
         isFeatured: index === 0,
@@ -81,7 +130,7 @@ export async function seedMenuIfEmpty() {
   }
 
   await MenuItem.insertMany(items);
-  console.log(`✓ Auto-seeded ${categories.length} categories and ${items.length} menu items`);
+  console.log(`✓ Auto-seeded ${categories.length} categories and ${items.length} menu items with unique food images`);
 }
 
 if (process.argv[1]?.endsWith('seed-menu.ts')) {
