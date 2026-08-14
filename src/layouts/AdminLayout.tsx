@@ -1,0 +1,174 @@
+import { Outlet, NavLink, useNavigate, useLocation, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  LayoutDashboard, ShoppingBag, UtensilsCrossed, FolderTree, TicketPercent,
+  Star, CreditCard, Users, Settings, LogOut, Menu as MenuIcon, X, Home,
+} from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { cn } from '@/lib/utils';
+import Logo from '@/components/Logo';
+
+const ICON_MAP: Record<string, any> = {
+  LayoutDashboard, ShoppingBag, UtensilsCrossed, FolderTree, TicketPercent,
+  Star, CreditCard, Users, Settings,
+};
+
+const NAV_ITEMS = [
+  { label: 'Dashboard', path: '/admin', icon: 'LayoutDashboard' },
+  { label: 'Orders', path: '/admin/orders', icon: 'ShoppingBag' },
+  { label: 'Menu', path: '/admin/menu', icon: 'UtensilsCrossed' },
+  { label: 'Categories', path: '/admin/categories', icon: 'FolderTree' },
+  { label: 'Coupons', path: '/admin/coupons', icon: 'TicketPercent' },
+  { label: 'Reviews', path: '/admin/reviews', icon: 'Star' },
+  { label: 'Payments', path: '/admin/payments', icon: 'CreditCard' },
+  { label: 'Users', path: '/admin/users', icon: 'Users' },
+  { label: 'Settings', path: '/admin/settings', icon: 'Settings' },
+];
+
+export default function AdminLayout() {
+  const { profile, signOut, isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-ink-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-ink-700 border-t-ember-500" />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-ink-950 px-4 text-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
+          <X className="h-8 w-8 text-red-400" />
+        </div>
+        <h1 className="font-display text-2xl font-bold text-cream-50">Access Denied</h1>
+        <p className="text-sm text-ink-300">You need admin privileges to access this page.</p>
+        <Link to="/" className="rounded-xl bg-ember-500 px-6 py-3 text-sm font-semibold text-ink-950">
+          Back to Home
+        </Link>
+      </div>
+    );
+  }
+
+  const SidebarContent = () => (
+    <>
+      <div className="flex h-16 items-center border-b border-ink-800 px-6">
+        <Logo />
+      </div>
+      <div className="px-3 py-4">
+        <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-ink-400">Admin Panel</p>
+        <nav className="space-y-1">
+          {NAV_ITEMS.map((item) => {
+            const Icon = ICON_MAP[item.icon];
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === '/admin'}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
+                    isActive
+                      ? 'bg-ember-500 text-ink-950 shadow-lg shadow-ember-500/20'
+                      : 'text-ink-300 hover:bg-ink-800 hover:text-cream-100',
+                  )
+                }
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {item.label}
+              </NavLink>
+            );
+          })}
+        </nav>
+      </div>
+      <div className="mt-auto border-t border-ink-800 p-3">
+        <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ember-500/20 text-sm font-bold text-ember-400">
+            {profile?.name?.charAt(0).toUpperCase() || 'A'}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-cream-100 truncate">{profile?.name}</p>
+            <p className="text-xs text-ink-400">Administrator</p>
+          </div>
+        </div>
+        <div className="mt-2 space-y-1">
+          <Link to="/" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-ink-300 hover:bg-ink-800 hover:text-cream-100">
+            <Home className="h-4 w-4" /> View Store
+          </Link>
+          <button
+            onClick={() => { signOut(); navigate('/'); }}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-red-400 hover:bg-red-500/10"
+          >
+            <LogOut className="h-4 w-4" /> Sign Out
+          </button>
+        </div>
+      </div>
+    </>
+  );
+
+  return (
+    <div className="min-h-screen bg-ink-950">
+      {/* Desktop sidebar */}
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-ink-800 bg-ink-900 lg:flex">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile sidebar */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="absolute inset-0 bg-ink-950/80 backdrop-blur-sm"
+            />
+            <motion.aside
+              initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+              className="absolute inset-y-0 left-0 flex w-64 flex-col bg-ink-900"
+            >
+              <SidebarContent />
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Main content */}
+      <div className="lg:pl-64">
+        {/* Top bar */}
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-ink-800 bg-ink-900/80 px-4 backdrop-blur-lg lg:px-8">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-lg p-2 text-cream-100 hover:bg-ink-800 lg:hidden"
+          >
+            <MenuIcon className="h-5 w-5" />
+          </button>
+          <h1 className="font-display text-lg font-semibold text-cream-50 lg:text-xl">
+            {NAV_ITEMS.find((n) => n.path === location.pathname || (n.path !== '/admin' && location.pathname.startsWith(n.path)))?.label || 'Admin'}
+          </h1>
+          <div className="ml-auto flex items-center gap-2">
+            <Link
+              to="/"
+              className="rounded-xl border border-ink-600 px-3 py-1.5 text-xs font-medium text-cream-200 hover:bg-ink-800"
+            >
+              View Store
+            </Link>
+          </div>
+        </header>
+
+        <main className="p-4 lg:p-8">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

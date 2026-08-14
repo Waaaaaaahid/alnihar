@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: alnihar-api
+    runtime: node
+    buildCommand: npm install
+    startCommand: npx tsx src/server/start.ts
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_URL
+        sync: false
+
+  - type: web
+    name: alnihar-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
