@@ -21,19 +21,11 @@ export default function ProfilePage() {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-<<<<<<< HEAD
   const [form, setForm] = useState({ name: '', phone: '' });
 
   useEffect(() => {
     if (profile) {
       setForm({ name: profile.name, phone: profile.phone });
-=======
-  const [form, setForm] = useState({ full_name: '', phone: '' });
-
-  useEffect(() => {
-    if (profile) {
-      setForm({ full_name: profile.name, phone: profile.phone });
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     }
   }, [profile]);
 
@@ -52,11 +44,7 @@ export default function ProfilePage() {
     if (!session?.user?.id) return;
     setSaving(true);
     try {
-<<<<<<< HEAD
       await updateProfile(session.user.id, { name: form.name, phone: form.phone });
-=======
-      await updateProfile(session.user.id, { full_name: form.name, phone: form.phone });
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
       await refreshProfile();
       setEditing(false);
       showToast('Profile updated', 'success');
@@ -105,11 +93,7 @@ export default function ProfilePage() {
                 <Input
                   label="Full Name"
                   value={form.name}
-<<<<<<< HEAD
                   onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-=======
-                  onChange={(e) => setForm((p) => ({ ...p, full_name: e.target.value }))}
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                 />
                 <Input
                   label="Phone"
@@ -177,11 +161,7 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="font-mono text-sm font-semibold text-cream-50">{order.orderNumber}</span>
-<<<<<<< HEAD
                         <p className="mt-0.5 text-xs text-ink-400">{formatDateTime(order.createdAt)}</p>
-=======
-                        <p className="mt-0.5 text-xs text-ink-400">{formatDateTime(order.created_at)}</p>
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                       </div>
                       <div className="flex items-center gap-3">
                         <StatusBadge status={order.status} />
@@ -210,11 +190,7 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="font-mono text-sm font-semibold text-cream-50">{order.orderNumber}</span>
-<<<<<<< HEAD
                         <p className="mt-0.5 text-xs text-ink-400">{formatDateTime(order.createdAt)}</p>
-=======
-                        <p className="mt-0.5 text-xs text-ink-400">{formatDateTime(order.created_at)}</p>
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                       </div>
                       <div className="flex items-center gap-3">
                         <StatusBadge status={order.status} />

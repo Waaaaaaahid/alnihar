@@ -28,27 +28,16 @@ export default function AdminSettingsPage() {
 
   const update = (key: string, value: any) => setForm((p) => ({ ...p, [key]: value }));
   const updateHours = (day: string, value: string) => {
-<<<<<<< HEAD
     setForm((p) => ({ ...p, openingHours: { ...(p.openingHours || {}), [day]: value } }));
   };
   const updateSocial = (key: string, value: string) => {
     setForm((p) => ({ ...p, socialLinks: { ...(p.socialLinks || {}), [key]: value } }));
-=======
-    setForm((p) => ({ ...p, opening_hours: { ...(p.openingHours || {}), [day]: value } }));
-  };
-  const updateSocial = (key: string, value: string) => {
-    setForm((p) => ({ ...p, social_links: { ...(p.socialLinks || {}), [key]: value } }));
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   };
 
   const handleSave = async () => {
     setSaving(true);
     try {
-<<<<<<< HEAD
       const { _id, id, createdAt, updatedAt, __v, ...updates } = form;
-=======
-      const { id, created_at, updated_at, ...updates } = form;
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
       await updateSettings(updates);
       showToast('Settings saved', 'success');
     } catch (e: any) {
@@ -75,21 +64,12 @@ export default function AdminSettingsPage() {
           <div className="sm:col-span-2">
             <Input label="Address" value={form.address || ''} onChange={(e) => update('address', e.target.value)} />
           </div>
-<<<<<<< HEAD
           <Input label="Logo URL" value={form.logoUrl || ''} onChange={(e) => update('logoUrl', e.target.value)} />
           <Input label="Hero Image URL" value={form.heroImageUrl || ''} onChange={(e) => update('heroImageUrl', e.target.value)} />
           <Input label="Story Image URL" value={form.storyImageUrl || ''} onChange={(e) => update('storyImageUrl', e.target.value)} />
         </div>
         <button
           onClick={() => update('isOpen', !form.isOpen)}
-=======
-          <Input label="Logo URL" value={form.logoUrl || ''} onChange={(e) => update('logo_url', e.target.value)} />
-          <Input label="Hero Image URL" value={form.heroImageUrl || ''} onChange={(e) => update('hero_image_url', e.target.value)} />
-          <Input label="Story Image URL" value={form.storyImageUrl || ''} onChange={(e) => update('story_image_url', e.target.value)} />
-        </div>
-        <button
-          onClick={() => update('is_open', !form.isOpen)}
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
           className={cn('mt-4 flex items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium w-full', form.isOpen ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400' : 'border-ink-600 text-ink-300')}
         >
           {form.isOpen ? 'Restaurant Open' : 'Restaurant Closed'}
@@ -113,13 +93,8 @@ export default function AdminSettingsPage() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-2xl border border-ink-700/50 bg-ink-900 p-6">
         <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-bold text-cream-50"><Truck className="h-5 w-5 text-ember-500" /> Delivery & Tax</h2>
         <div className="grid grid-cols-2 gap-4">
-<<<<<<< HEAD
           <Input label="Delivery Charge (₹)" type="number" value={String(form.deliveryCharge || 0)} onChange={(e) => update('deliveryCharge', parseFloat(e.target.value) || 0)} />
           <Input label="Tax Rate (%)" type="number" value={String(form.taxRate || 0)} onChange={(e) => update('taxRate', parseFloat(e.target.value) || 0)} />
-=======
-          <Input label="Delivery Charge (₹)" type="number" value={String(form.deliveryCharge || 0)} onChange={(e) => update('delivery_charge', parseFloat(e.target.value) || 0)} />
-          <Input label="Tax Rate (%)" type="number" value={String(form.taxRate || 0)} onChange={(e) => update('tax_rate', parseFloat(e.target.value) || 0)} />
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
         </div>
       </motion.div>
 

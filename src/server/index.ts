@@ -1,12 +1,7 @@
-<<<<<<< HEAD
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-=======
-import express from 'express';
-import cors from 'cors';
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth';
 import catalogRoutes from './routes/catalog';
@@ -21,10 +16,7 @@ export function createServer() {
     origin: process.env.CLIENT_URL || '*',
     credentials: true,
   }));
-<<<<<<< HEAD
   app.use(cookieParser());
-=======
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));
 

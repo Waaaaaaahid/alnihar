@@ -22,7 +22,6 @@ export default function MenuPage() {
   const [filterAvailable, setFilterAvailable] = useState(false);
 
   useEffect(() => {
-<<<<<<< HEAD
     let active = true;
     const load = () =>
       Promise.all([fetchCategories(), fetchMenuItems()])
@@ -37,15 +36,6 @@ export default function MenuPage() {
     load();
     const interval = setInterval(load, 10000);
     return () => { active = false; clearInterval(interval); };
-=======
-    Promise.all([fetchCategories(), fetchMenuItems()])
-      .then(([cats, menuItems]) => {
-        setCategories(cats);
-        setItems(menuItems);
-      })
-      .catch((err) => setError(err.message || 'Failed to load menu'))
-      .finally(() => setLoading(false));
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   }, []);
 
   useEffect(() => {

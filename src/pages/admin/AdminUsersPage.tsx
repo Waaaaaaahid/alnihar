@@ -66,11 +66,7 @@ export default function AdminUsersPage() {
                       {u.role}
                     </span>
                   </td>
-<<<<<<< HEAD
                   <td className="px-4 py-3 text-ink-300 text-xs">{formatDate(u.createdAt || '')}</td>
-=======
-                  <td className="px-4 py-3 text-ink-300 text-xs">{formatDate(u.created_at)}</td>
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                 </tr>
               ))}
             </tbody>

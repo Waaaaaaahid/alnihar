@@ -45,11 +45,7 @@ export default function AdminPaymentsPage() {
                   <td className="px-4 py-3 font-mono text-xs text-cream-100">{p.order?.orderNumber || '—'}</td>
                   <td className="px-4 py-3 text-cream-200">{p.order?.customerName || '—'}</td>
                   <td className="px-4 py-3 font-mono text-xs text-ink-300">{p.razorpayPaymentId || p.razorpayOrderId || '—'}</td>
-<<<<<<< HEAD
                   <td className="px-4 py-3 text-ink-300 text-xs">{formatDateTime(p.createdAt)}</td>
-=======
-                  <td className="px-4 py-3 text-ink-300 text-xs">{formatDateTime(p.created_at)}</td>
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                   <td className="px-4 py-3"><StatusBadge status={p.status} /></td>
                   <td className="px-4 py-3 text-right font-semibold text-cream-50">{formatPrice(Number(p.amount))}</td>
                 </tr>

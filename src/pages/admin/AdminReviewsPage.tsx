@@ -26,11 +26,7 @@ export default function AdminReviewsPage() {
   useEffect(() => { load(); }, []);
 
   const toggleApprove = async (r: Review) => {
-<<<<<<< HEAD
     try { await updateReview(r.id, { isApproved: !r.isApproved }); showToast(r.isApproved ? 'Review hidden' : 'Review approved', 'success'); load(); }
-=======
-    try { await updateReview(r.id, { is_approved: !r.isApproved }); showToast(r.isApproved ? 'Review hidden' : 'Review approved', 'success'); load(); }
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
     catch (e: any) { showToast(e.message, 'error'); }
   };
 
@@ -72,11 +68,7 @@ export default function AdminReviewsPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ember-500/20 text-sm font-bold text-ember-400">{r.name.charAt(0)}</div>
                   <div>
                     <p className="font-semibold text-cream-100 text-sm">{r.name}</p>
-<<<<<<< HEAD
                     <p className="text-xs text-ink-400">{timeAgo(r.createdAt)}</p>
-=======
-                    <p className="text-xs text-ink-400">{timeAgo(r.created_at)}</p>
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
                   </div>
                 </div>
                 <div className="flex gap-0.5">

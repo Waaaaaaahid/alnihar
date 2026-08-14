@@ -26,7 +26,6 @@ export default function HomePage() {
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   useEffect(() => {
-<<<<<<< HEAD
     let active = true;
     const load = () =>
       Promise.all([fetchFeaturedItems(), fetchBestsellerItems(), fetchCategories(), fetchApprovedReviews()])
@@ -43,17 +42,6 @@ export default function HomePage() {
     load();
     const interval = setInterval(load, 15000);
     return () => { active = false; clearInterval(interval); };
-=======
-    Promise.all([fetchFeaturedItems(), fetchBestsellerItems(), fetchCategories(), fetchApprovedReviews()])
-      .then(([f, b, c, r]) => {
-        setFeatured(f);
-        setBestsellers(b);
-        setCategories(c);
-        setReviews(r);
-      })
-      .catch((err) => setError(err.message || 'Failed to load'))
-      .finally(() => setLoading(false));
->>>>>>> 9a922357087256e67fe5d9e2a66ae9a1e58eec70
   }, []);
 
   useEffect(() => {
