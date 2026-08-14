@@ -20,7 +20,7 @@ export default function CustomerLayout() {
       <Navbar />
 
       {restaurantClosed && (
-        <div className="relative z-30 border-b border-ember-500/20 bg-ink-900 px-4 py-4 sm:px-6">
+        <div className="relative z-30 mt-16 border-b border-ember-500/20 bg-ink-900 px-4 py-4 sm:px-6 lg:mt-20">
           <div className="container-wide">
             <div className="flex items-center gap-3 rounded-2xl border border-ember-500/20 bg-ember-500/10 px-4 py-3.5 sm:px-5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ember-500/15 text-ember-400">
@@ -37,7 +37,7 @@ export default function CustomerLayout() {
         </div>
       )}
 
-      <main className="flex-1 pt-16 lg:pt-20">
+      <main className={`flex-1 ${restaurantClosed ? 'pt-0' : 'pt-16 lg:pt-20'}`}>
         <Outlet />
       </main>
       <Footer />
