@@ -69,8 +69,9 @@ export async function updateCoupon(id: string, updates: Partial<Coupon>): Promis
 export async function deleteCoupon(id: string): Promise<void> { await apiRequest(`/api/coupons/${id}`, { method: 'DELETE' }); }
 
 export async function fetchApprovedReviews(): Promise<Review[]> { return normalizeArray(await apiRequest<Review[]>('/api/reviews')); }
-export async function fetchAllReviews(): Promise<Review[]> { return normalizeArray(await apiRequest<Review[]>('/api/reviews?approved=false')); }
-export async function createReview(review: { name: string; rating: number; comment: string }): Promise<Review> { return normalize(await apiRequest<Review>('/api/reviews', { method: 'POST', body: JSON.stringify(review) })); }
+export async function fetchAllReviews(): Promise<Review[]> { return normalizeArray(await apiRequest<Review[]>('/api/reviews/admin')); }
+export async function fetchMyOrderReview(orderId: string): Promise<Review | null> { try { return normalize(await apiRequest<Review>(`/api/reviews/order/${orderId}`)); } catch { return null; } }
+export async function createReview(review: { orderId?: string; name?: string; rating: number; comment: string }): Promise<Review> { return normalize(await apiRequest<Review>('/api/reviews', { method: 'POST', body: JSON.stringify(review) })); }
 export async function updateReview(id: string, updates: Partial<Review>): Promise<Review> { return normalize(await apiRequest<Review>(`/api/reviews/${id}`, { method: 'PUT', body: JSON.stringify(updates) })); }
 export async function deleteReview(id: string): Promise<void> { await apiRequest(`/api/reviews/${id}`, { method: 'DELETE' }); }
 

@@ -93,11 +93,14 @@ export interface Review {
   _id: string;
   id: string;
   userId: string | null;
+  orderId: string | null;
   name: string;
   rating: number;
   comment: string;
   isApproved: boolean;
+  isVisible: boolean;
   createdAt: string;
+  order?: { orderNumber: string; customerName: string; _id: string };
 }
 
 export interface Payment {

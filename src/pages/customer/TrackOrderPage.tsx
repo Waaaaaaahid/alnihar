@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ReceiptText, CheckCheck, Flame, PackageCheck, Bike, Home, XCircle, Clock, MapPin, Phone, ShoppingBag, ArrowRight } from 'lucide-react';
+import { ReceiptText, CheckCheck, Flame, PackageCheck, Bike, Home, XCircle, Clock, MapPin, Phone, ShoppingBag, ArrowRight, Star, Send, CheckCircle2 } from 'lucide-react';
 import { useOrderTracking } from '@/hooks/useOrderTracking';
 import { Loader, ErrorState } from '@/components/ui/Loader';
 import { StatusBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
+import { useAuth } from '@/context/AuthContext';
+import { fetchMyOrderReview, createReview } from '@/lib/api';
+import type { Review } from '@/lib/types';
 import { formatPrice, formatDateTime, cn } from '@/lib/utils';
 import { ORDER_STATUSES, ORDER_STATUS_LABELS, ESTIMATED_TIMES } from '@/lib/constants';
 
@@ -15,8 +18,17 @@ const FLOW_STATUSES = ORDER_STATUSES;
 export default function TrackOrderPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { session } = useAuth();
   const { order, loading, error } = useOrderTracking(id);
   const [deliveryCelebrationShown, setDeliveryCelebrationShown] = useState(false);
+  const [myReview, setMyReview] = useState<Review | null>(null);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [justSubmitted, setJustSubmitted] = useState(false);
+
+  const isOwner = !!session?.user?.id && !!order && order.userId === session.user.id;
 
   useEffect(() => {
     if (order?.status === 'delivered') {
@@ -27,6 +39,33 @@ export default function TrackOrderPage() {
       }
     }
   }, [order?.status, order?.id]);
+
+  useEffect(() => {
+    if (order?.status === 'delivered' && isOwner && id) {
+      fetchMyOrderReview(id).then((review) => {
+        setMyReview(review);
+        if (review) {
+          setRating(review.rating);
+          setComment(review.comment);
+        }
+      });
+    }
+  }, [order?.status, isOwner, id]);
+
+  const handleSubmitReview = async () => {
+    if (!rating) return;
+    setSubmitting(true);
+    try {
+      await createReview({ orderId: order!.id, rating, comment: comment.trim() });
+      setJustSubmitted(true);
+    } catch {
+      // Already reviewed or failed — load server state so UI reflects truth
+      const review = await fetchMyOrderReview(order!.id);
+      if (review) { setMyReview(review); setRating(review.rating); setComment(review.comment); }
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (loading) return <div className="container-narrow py-20"><Loader size="lg" /></div>;
   if (error) return <div className="container-narrow py-20"><ErrorState message={error} /></div>;
@@ -84,6 +123,61 @@ export default function TrackOrderPage() {
                   <motion.h3 initial={animateDelivery ? { opacity: 0, y: 8 } : false} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.2 : 0, duration: 0.35 }} className="mt-4 font-display text-xl font-bold text-cream-50">Order Delivered</motion.h3>
                   <motion.p initial={animateDelivery ? { opacity: 0, y: 6 } : false} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.3 : 0, duration: 0.35 }} className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-300">Thank you for ordering from AL NIHAR. We hope you enjoyed your meal and look forward to serving you again.</motion.p>
                   <motion.div initial={animateDelivery ? { scaleX: 0, opacity: 0 } : false} animate={{ scaleX: 1, opacity: 1 }} transition={{ delay: animateDelivery ? 0.4 : 0, duration: 0.45 }} className="mx-auto mt-5 h-px max-w-24 origin-center bg-gradient-to-r from-transparent via-ember-500/60 to-transparent" />
+
+                  {isOwner && order.status === 'delivered' && (
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: animateDelivery ? 0.5 : 0, duration: 0.4 }} className="mt-8 border-t border-ink-700/60 pt-8 text-left">
+                      <AnimatePresence mode="wait" initial={false}>
+                        {myReview || justSubmitted ? (
+                          <motion.div key="review-done" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.35, ease: 'easeOut' }} className="mx-auto max-w-md text-center">
+                            <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.05 }} className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-400/40 bg-emerald-500/10 text-emerald-400">
+                              <CheckCircle2 className="h-6 w-6" />
+                            </motion.div>
+                            <h4 className="mt-4 font-display text-lg font-bold text-cream-50">Thank you for your review!</h4>
+                            <div className="mt-2 flex justify-center gap-0.5">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className={i < (myReview?.rating || rating) ? 'h-5 w-5 fill-gold-500 text-gold-500' : 'h-5 w-5 text-ink-600'} />
+                              ))}
+                            </div>
+                            {myReview?.comment && <p className="mt-3 text-sm leading-6 text-ink-300">"{myReview.comment}"</p>}
+                            <p className="mt-4 text-xs text-ink-400">Your review will appear on the website after admin approval.</p>
+                          </motion.div>
+                        ) : (
+                          <motion.div key="review-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }} className="mx-auto max-w-md">
+                            <h4 className="text-center font-display text-lg font-bold text-cream-50">Rate Your Order</h4>
+                            <p className="mt-1 text-center text-sm text-ink-300">How was your experience with AL NIHAR?</p>
+                            <div className="mt-4 flex items-center justify-center gap-2">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <button
+                                  key={i}
+                                  type="button"
+                                  onMouseEnter={() => setHoverRating(i + 1)}
+                                  onMouseLeave={() => setHoverRating(0)}
+                                  onClick={() => setRating(i + 1)}
+                                  className="transition-transform hover:scale-110 focus:outline-none"
+                                  aria-label={`${i + 1} star`}
+                                >
+                                  <Star className={cn('h-9 w-9 transition-colors', (hoverRating || rating) > i ? 'fill-gold-500 text-gold-500' : 'text-ink-600')} />
+                                </button>
+                              ))}
+                            </div>
+                            <div className="mt-5">
+                              <textarea
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                placeholder="Share your experience (optional)"
+                                rows={3}
+                                className="w-full rounded-xl border border-ink-600 bg-ink-900 px-4 py-3 text-sm text-cream-100 placeholder:text-ink-400 focus:border-ember-500 focus:outline-none focus:ring-2 focus:ring-ember-500/40"
+                              />
+                            </div>
+                            <Button fullWidth className="mt-4" onClick={handleSubmitReview} loading={submitting} disabled={!rating}>
+                              <Send className="h-4 w-4" /> Submit Review
+                            </Button>
+                            <p className="mt-3 text-center text-xs text-ink-400">Only you can review this order — one review per order.</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
