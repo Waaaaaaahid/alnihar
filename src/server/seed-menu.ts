@@ -34,55 +34,60 @@ const basePrices: Record<string, number> = {
   'Drinks & Beverages': 69,
 };
 
-/**
- * Generates one deterministic, item-specific food image URL.
- * The prompt is built from the exact menu item/category so items never
- * intentionally fall back to the category's single generic image.
- */
-function aiFoodImage(name: string, category: string): string {
-  const prompt = [
-    `ultra realistic professional food photography of ${name}`,
-    `category ${category}`,
-    'restaurant menu hero shot',
-    'the exact food named in the prompt, appetizing and freshly prepared',
-    'hyper realistic natural food textures, realistic ingredients, realistic steam and highlights where appropriate',
-    'premium commercial food photography, cinematic soft lighting, shallow depth of field',
-    'clean premium restaurant presentation, no people, no hands',
-    'no text, no letters, no logo, no branding, no watermark, no packaging labels',
-    'photorealistic, extremely detailed, sharp focus, 4K quality',
-  ].join(', ');
+const imageSets: Record<string, string[]> = {
+  'Burgers': [
+    '109400','1639562','2874981','3915906','5175569','5639467','20185767','28272159','109400','1639562',
+  ],
+  'Pizza': [
+    '315755','2619967','19260826','19260786','8487848','315755','2619967','19260826','19260786','8487848',
+  ],
+  'Pasta': [
+    '1279330','2703468','3807044','7626700','8108071','6748831','8963444','9292152','1279330','2703468',
+  ],
+  'Wraps & Rolls': [
+    '461198','13292629','29535635','9624298','5175629','461198','13292629','29535635','9624298','5175629',
+  ],
+  'Snacks & Starters': [
+    '1583884','4109234','8254056','11485199','12946719','16108600','19784555','8862763','1583884','4109234',
+  ],
+  'Sandwiches': [
+    '1600711','1603898','15076691','25819519','12318097','1600711','1603898','15076691','25819519','12318097',
+  ],
+  'Drinks & Beverages': [
+    '109275','3908198','6463664','109275','3908198','6463664','109275','3908198','6463664','109275',
+  ],
+};
 
-  const seed = Array.from(name).reduce((hash, char) => ((hash * 31 + char.charCodeAt(0)) >>> 0), 2166136261);
-  return `https://pollinations.ai/p/${encodeURIComponent(prompt)}?model=flux&width=1536&height=1024&seed=${seed}&nologo=true&enhance=true`;
+function imageForItem(category: string, index: number): string {
+  const images = imageSets[category] || [];
+  const photoId = images[index % images.length];
+  // Direct Pexels CDN JPEG. Query variants give each menu row a distinct URL
+  // while keeping the source image reliable and immediately renderable.
+  const crop = index % 3 === 0 ? '1200&h=900' : index % 3 === 1 ? '1100&h=1000' : '1000&h=1200';
+  return `https://images.pexels.com/photos/${photoId}/pexels-photo-${photoId}.jpeg?auto=compress&cs=tinysrgb&w=${crop}&fit=crop&q=90`;
 }
 
 const allSeedItemNames = Object.values(itemNames).flat();
 
-/**
- * Existing installations already have menu rows, so changing the seed data
- * alone would not update their images. This migration updates only imageUrl
- * for the known seeded menu items and leaves prices, orders, availability,
- * reviews, categories, and every other field untouched.
- */
 export async function updateMenuItemImages() {
-  const operations = allSeedItemNames.map((name) => ({
-    updateMany: {
-      filter: { name },
-      update: { $set: { imageUrl: aiFoodImage(name, Object.entries(itemNames).find(([, names]) => names.includes(name))?.[0] || 'Food') } },
-    },
-  }));
+  const operations = Object.entries(itemNames).flatMap(([category, names]) =>
+    names.map((name, index) => ({
+      updateMany: {
+        filter: { name },
+        update: { $set: { imageUrl: imageForItem(category, index) } },
+      },
+    })),
+  );
 
   if (operations.length > 0) {
     await MenuItem.bulkWrite(operations, { ordered: false });
-    console.log(`✓ Updated unique food images for ${allSeedItemNames.length} menu items`);
+    console.log(`✓ Updated working Pexels images for ${allSeedItemNames.length} menu items`);
   }
 }
 
 export async function seedMenuIfEmpty() {
   const existingItems = await MenuItem.countDocuments();
 
-  // Existing AL NIHAR installations need their current 70 menu images updated
-  // too. Do this before returning, without deleting/recreating menu data.
   if (existingItems > 0) {
     await updateMenuItemImages();
     return;
@@ -119,7 +124,7 @@ export async function seedMenuIfEmpty() {
         price,
         originalPrice: index % 3 === 0 ? price + 30 : null,
         categoryId,
-        imageUrl: aiFoodImage(name, categoryName),
+        imageUrl: imageForItem(categoryName, index),
         isAvailable: true,
         isBestseller: index < 2,
         isFeatured: index === 0,
@@ -130,7 +135,7 @@ export async function seedMenuIfEmpty() {
   }
 
   await MenuItem.insertMany(items);
-  console.log(`✓ Auto-seeded ${categories.length} categories and ${items.length} menu items with unique food images`);
+  console.log(`✓ Auto-seeded ${categories.length} categories and ${items.length} menu items with working Pexels images`);
 }
 
 if (process.argv[1]?.endsWith('seed-menu.ts')) {
