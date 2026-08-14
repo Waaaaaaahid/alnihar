@@ -16,7 +16,7 @@ services:
         sync: false
 
   - type: web
-    name: alnihar-frontend
+    name: alnihar-com
     runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
