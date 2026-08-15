@@ -51,7 +51,6 @@ router.delete('/coupons/:id', authMiddleware, adminMiddleware, async (req: AuthR
 });
 
 // ============ REVIEWS ============
-// Public: only approved AND visible reviews
 router.get('/reviews', async (_req, res: any) => {
   try {
     const reviews = await Review.find({ isApproved: true, isVisible: true }).sort({ createdAt: -1 });
@@ -59,7 +58,6 @@ router.get('/reviews', async (_req, res: any) => {
   } catch (e: any) { return error(res, e.message, 500); }
 });
 
-// Admin: all reviews with order info
 router.get('/reviews/admin', authMiddleware, adminMiddleware, async (_req, res: any) => {
   try {
     const reviews = await Review.find().populate('orderId', 'orderNumber customerName').sort({ createdAt: -1 });
@@ -67,11 +65,7 @@ router.get('/reviews/admin', authMiddleware, adminMiddleware, async (_req, res: 
       const doc = r.toObject();
       const orderId = doc.orderId as unknown as { _id?: unknown; orderNumber?: string; customerName?: string } | null;
       if (orderId && typeof orderId === 'object' && orderId._id) {
-        return {
-          ...doc,
-          order: { _id: orderId._id, orderNumber: orderId.orderNumber, customerName: orderId.customerName },
-          orderId: String(orderId._id),
-        };
+        return { ...doc, order: { _id: orderId._id, orderNumber: orderId.orderNumber, customerName: orderId.customerName }, orderId: String(orderId._id) };
       }
       return doc;
     });
@@ -79,7 +73,6 @@ router.get('/reviews/admin', authMiddleware, adminMiddleware, async (_req, res: 
   } catch (e: any) { return error(res, e.message, 500); }
 });
 
-// Customer: check if they already reviewed a specific order
 router.get('/reviews/order/:orderId', authMiddleware, async (req: AuthRequest, res: any) => {
   try {
     const review = await Review.findOne({ orderId: req.params.orderId, userId: req.userId });
@@ -87,12 +80,10 @@ router.get('/reviews/order/:orderId', authMiddleware, async (req: AuthRequest, r
   } catch (e: any) { return error(res, e.message, 500); }
 });
 
-// Customer submits a review for a delivered order (or admin creates one manually)
 router.post('/reviews', authMiddleware, async (req: AuthRequest, res: any) => {
   try {
     const { orderId, name, rating, comment } = req.body;
     const numRating = Math.min(5, Math.max(1, parseInt(rating) || 1));
-
     if (orderId) {
       const order = await Order.findById(orderId);
       if (!order) return error(res, 'Order not found', 404);
@@ -100,20 +91,9 @@ router.post('/reviews', authMiddleware, async (req: AuthRequest, res: any) => {
       if (order.status !== 'delivered') return error(res, 'You can review an order only after it is delivered', 400);
       const existing = await Review.findOne({ orderId, userId: req.userId });
       if (existing) return error(res, 'You have already reviewed this order', 400);
-    } else if (req.userRole !== 'admin') {
-      return error(res, 'Order reference is required', 400);
-    }
-
+    } else if (req.userRole !== 'admin') return error(res, 'Order reference is required', 400);
     const user = await User.findById(req.userId).select('name');
-    const review = await Review.create({
-      userId: req.userId || null,
-      orderId: orderId || null,
-      name: name || user?.name || 'Customer',
-      rating: numRating,
-      comment: comment || '',
-      isApproved: req.userRole === 'admin',
-      isVisible: true,
-    });
+    const review = await Review.create({ userId: req.userId || null, orderId: orderId || null, name: name || user?.name || 'Customer', rating: numRating, comment: comment || '', isApproved: req.userRole === 'admin', isVisible: true });
     return success(res, review, 'Review submitted', 201);
   } catch (e: any) {
     if (e?.code === 11000) return error(res, 'You have already reviewed this order', 400);
@@ -121,7 +101,6 @@ router.post('/reviews', authMiddleware, async (req: AuthRequest, res: any) => {
   }
 });
 
-// Admin: edit review (rating/comment), approve/reject, show/hide
 router.put('/reviews/:id', authMiddleware, adminMiddleware, async (req: AuthRequest, res: any) => {
   try {
     const { rating, comment, isApproved, isVisible, name } = req.body;
@@ -147,8 +126,37 @@ router.delete('/reviews/:id', authMiddleware, adminMiddleware, async (req: AuthR
 // ============ PAYMENTS ============
 router.get('/payments', authMiddleware, adminMiddleware, async (_req, res: any) => {
   try {
-    const payments = await Payment.find().populate('orderId', 'orderNumber customerName total').sort({ createdAt: -1 });
-    return success(res, payments);
+    const payments = await Payment.find({ status: 'paid' }).populate('orderId').sort({ createdAt: -1 });
+    const mapped = payments.map((payment) => {
+      const doc = payment.toObject() as any;
+      const order = doc.orderId && typeof doc.orderId === 'object' ? doc.orderId : null;
+      return {
+        ...doc,
+        orderId: order?._id || doc.orderId,
+        order: order ? {
+          _id: order._id,
+          orderNumber: order.orderNumber,
+          customerName: order.customerName,
+          customerPhone: order.customerPhone,
+          customerEmail: order.customerEmail,
+          deliveryAddress: order.deliveryAddress,
+          deliveryLatitude: order.deliveryLatitude,
+          deliveryLongitude: order.deliveryLongitude,
+          orderNotes: order.orderNotes,
+          paymentMethod: order.paymentMethod,
+          paymentStatus: order.paymentStatus,
+          items: order.items,
+          subtotal: order.subtotal,
+          tax: order.tax,
+          deliveryFee: order.deliveryFee,
+          discount: order.discount,
+          total: order.total,
+          createdAt: order.createdAt,
+          updatedAt: order.updatedAt,
+        } : null,
+      };
+    });
+    return success(res, mapped);
   } catch (e: any) { return error(res, e.message, 500); }
 });
 
@@ -164,9 +172,7 @@ router.get('/users', authMiddleware, adminMiddleware, async (_req, res: any) => 
 router.get('/settings', async (_req, res: any) => {
   try {
     let settings = await RestaurantSettings.findOne();
-    if (!settings) {
-      settings = await RestaurantSettings.create({});
-    }
+    if (!settings) settings = await RestaurantSettings.create({});
     return success(res, settings);
   } catch (e: any) { return error(res, e.message, 500); }
 });
@@ -174,11 +180,8 @@ router.get('/settings', async (_req, res: any) => {
 router.put('/settings', authMiddleware, adminMiddleware, async (req: AuthRequest, res: any) => {
   try {
     let settings = await RestaurantSettings.findOne();
-    if (!settings) {
-      settings = await RestaurantSettings.create(req.body);
-    } else {
-      settings = await RestaurantSettings.findOneAndUpdate({}, req.body, { new: true });
-    }
+    if (!settings) settings = await RestaurantSettings.create(req.body);
+    else settings = await RestaurantSettings.findOneAndUpdate({}, req.body, { new: true });
     return success(res, settings, 'Settings updated');
   } catch (e: any) { return error(res, e.message, 500); }
 });
