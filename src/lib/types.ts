@@ -2,7 +2,7 @@ export type OrderStatus = 'placed' | 'confirmed' | 'preparing' | 'ready' | 'out_
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
 export type PaymentMethod = 'cod' | 'razorpay';
 export type UserRole = 'customer' | 'admin';
-export interface Profile { id:string; name:string; email:string; phone:string; role:UserRole; createdAt?:string; }
+export interface Profile { id:string; name:string; email:string; phone:string; role:UserRole; codEnabled:boolean; createdAt?:string; }
 export interface Category { _id:string; id:string; name:string; slug:string; description:string; imageUrl:string; isActive:boolean; sortOrder:number; }
 export interface MenuItem { _id:string; id:string; name:string; description:string; price:number; originalPrice:number|null; categoryId:string|null; imageUrl:string; isAvailable:boolean; isBestseller:boolean; isFeatured:boolean; isSpicy:boolean; sortOrder:number; category?:Category; }
 export interface Coupon { _id:string; id:string; code:string; description:string; discountType:'percentage'|'fixed'; discountValue:number; minOrder:number; maxDiscount:number|null; isActive:boolean; expiresAt:string|null; usageLimit:number|null; usedCount:number; }
