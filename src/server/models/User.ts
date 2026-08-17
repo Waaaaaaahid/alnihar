@@ -6,6 +6,7 @@ export interface IUser extends Document {
   password: string;
   phone: string;
   role: 'customer' | 'admin';
+  codEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +18,7 @@ const UserSchema = new Schema<IUser>(
     password: { type: String, required: true, minlength: 6 },
     phone: { type: String, default: '' },
     role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
+    codEnabled: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
