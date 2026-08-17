@@ -1,78 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Users as UsersIcon } from 'lucide-react';
-import { fetchAllProfiles } from '@/lib/api';
+import { Users as UsersIcon, LockKeyhole, CheckCircle2, Loader2 } from 'lucide-react';
+import { fetchAllProfiles, updateCustomerCod } from '@/lib/api';
 import type { Profile } from '@/lib/types';
 import { Loader, ErrorState, EmptyState } from '@/components/ui/Loader';
-import { formatDate } from '@/lib/utils';
+import { formatDate, formatPrice } from '@/lib/utils';
 
+type CustomerProfile = Profile & { onlineOrders:number; onlineSpend:number };
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<Profile[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchAllProfiles()
-      .then(setUsers)
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <Loader size="lg" className="py-20" />;
-  if (error) return <ErrorState message={error} />;
-
-  const customers = users.filter((u) => u.role === 'customer');
-  const admins = users.filter((u) => u.role === 'admin');
-
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-5">
-          <p className="font-display text-2xl font-bold text-cream-50">{customers.length}</p>
-          <p className="text-xs text-ink-300">Customers</p>
-        </div>
-        <div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-5">
-          <p className="font-display text-2xl font-bold text-cream-50">{admins.length}</p>
-          <p className="text-xs text-ink-300">Admins</p>
-        </div>
-      </div>
-
-      {users.length === 0 ? (
-        <EmptyState icon={<UsersIcon className="h-12 w-12" />} title="No users" message="Registered users will appear here" />
-      ) : (
-        <div className="overflow-x-auto rounded-2xl border border-ink-700/50 bg-ink-900">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-ink-700 text-left text-xs uppercase tracking-wider text-ink-400">
-                <th className="px-4 py-3 font-medium">User</th>
-                <th className="px-4 py-3 font-medium">Phone</th>
-                <th className="px-4 py-3 font-medium">Role</th>
-                <th className="px-4 py-3 font-medium">Joined</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-ink-800">
-              {users.map((u) => (
-                <tr key={u.id} className="hover:bg-ink-800/30">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ember-500/20 text-xs font-bold text-ember-400">
-                        {u.name?.charAt(0).toUpperCase() || 'U'}
-                      </div>
-                      <span className="text-cream-200">{u.name || 'Unnamed'}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-ink-300">{u.phone || '—'}</td>
-                  <td className="px-4 py-3">
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${u.role === 'admin' ? 'bg-ember-500/15 text-ember-400' : 'bg-ink-700 text-ink-300'}`}>
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-ink-300 text-xs">{formatDate(u.createdAt || '')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
+  const [users,setUsers]=useState<CustomerProfile[]>([]); const [loading,setLoading]=useState(true); const [error,setError]=useState<string|null>(null); const [updating,setUpdating]=useState<string|null>(null);
+  const load=()=>{setLoading(true);fetchAllProfiles().then(setUsers).catch(e=>setError(e.message)).finally(()=>setLoading(false));};
+  useEffect(()=>{load();},[]);
+  const toggleCod=async(u:CustomerProfile)=>{setUpdating(u.id);try{const result=await updateCustomerCod(u.id,!u.codEnabled);setUsers(prev=>prev.map(x=>x.id===u.id?{...x,codEnabled:result.codEnabled}:x));}catch(e:any){setError(e.message);}finally{setUpdating(null);}};
+  if(loading)return <Loader size="lg" className="py-20"/>; if(error)return <ErrorState message={error}/>;
+  const customers=users.filter(u=>u.role==='customer'); const admins=users.filter(u=>u.role==='admin');
+  return <div className="space-y-6">
+    <div className="grid grid-cols-2 gap-4"><div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-5"><p className="font-display text-2xl font-bold text-cream-50">{customers.length}</p><p className="text-xs text-ink-300">Customers</p></div><div className="rounded-2xl border border-ink-700/50 bg-ink-900 p-5"><p className="font-display text-2xl font-bold text-cream-50">{admins.length}</p><p className="text-xs text-ink-300">Admins</p></div></div>
+    {users.length===0?<EmptyState icon={<UsersIcon className="h-12 w-12"/>} title="No users" message="Registered users will appear here"/>:<div className="overflow-x-auto rounded-2xl border border-ink-700/50 bg-ink-900"><table className="w-full text-sm"><thead><tr className="border-b border-ink-700 text-left text-xs uppercase tracking-wider text-ink-400"><th className="px-4 py-3 font-medium">User</th><th className="px-4 py-3 font-medium">Phone</th><th className="px-4 py-3 font-medium">Role</th><th className="px-4 py-3 font-medium">Online Orders</th><th className="px-4 py-3 font-medium">Online Spend</th><th className="px-4 py-3 font-medium">COD</th><th className="px-4 py-3 font-medium">Joined</th></tr></thead><tbody className="divide-y divide-ink-800">{users.map(u=><tr key={u.id} className="hover:bg-ink-800/30"><td className="px-4 py-3"><div className="flex items-center gap-3"><div className="flex h-8 w-8 items-center justify-center rounded-full bg-ember-500/20 text-xs font-bold text-ember-400">{u.name?.charAt(0).toUpperCase()||'U'}</div><div><span className="text-cream-200">{u.name||'Unnamed'}</span><p className="text-[11px] text-ink-500">{u.email}</p></div></div></td><td className="px-4 py-3 text-ink-300">{u.phone||'—'}</td><td className="px-4 py-3"><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${u.role==='admin'?'bg-ember-500/15 text-ember-400':'bg-ink-700 text-ink-300'}`}>{u.role}</span></td><td className="px-4 py-3 text-cream-200">{u.role==='customer'?u.onlineOrders:'—'}</td><td className="px-4 py-3 text-cream-200">{u.role==='customer'?formatPrice(u.onlineSpend):'—'}</td><td className="px-4 py-3">{u.role==='customer'?<button onClick={()=>toggleCod(u)} disabled={updating===u.id} className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${u.codEnabled?'bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25':'bg-ink-700 text-ink-300 hover:bg-ink-600'}`}>{updating===u.id?<Loader2 className="h-3.5 w-3.5 animate-spin"/>:u.codEnabled?<CheckCircle2 className="h-3.5 w-3.5"/>:<LockKeyhole className="h-3.5 w-3.5"/>}{u.codEnabled?'COD ON':'COD LOCKED'}</button>:'—'}</td><td className="px-4 py-3 text-ink-300 text-xs">{formatDate(u.createdAt||'')}</td></tr>)}</tbody></table></div>}
+  </div>;
 }
