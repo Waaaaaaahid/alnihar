@@ -45,6 +45,7 @@ export async function fetchAdminStats():Promise<any>{return apiRequest('/api/ord
 export async function fetchRecentOrders(limit=6):Promise<Order[]>{return normalizeArray(await apiRequest<Order[]>(`/api/orders?limit=${limit}`));}
 export type SalesRange=7|30|180|365;
 export async function fetchSalesData(days:SalesRange=7):Promise<{date:string;revenue:number;orders:number}[]>{return apiRequest(`/api/orders/stats/sales?days=${days}`);}
-export async function fetchAllProfiles():Promise<Profile[]>{return apiRequest<Profile[]>('/api/users');}
+export async function fetchAllProfiles():Promise<Array<Profile & {onlineOrders:number;onlineSpend:number}>>{return apiRequest<any[]>('/api/users');}
+export async function updateCustomerCod(userId:string,enabled:boolean):Promise<{id:string;codEnabled:boolean}>{return apiRequest(`/api/users/${userId}/cod`,{method:'PUT',body:JSON.stringify({enabled})});}
 export async function fetchAllPayments():Promise<Payment[]>{return normalizeArray(await apiRequest<Payment[]>('/api/payments'));}
 export {calculateOrderTotals,formatPrice,formatDate,formatDateTime,timeAgo,validatePhone,validateEmail,cn,slugify} from './utils';
