@@ -17,7 +17,7 @@ export interface IPayment extends Document {
     deliveryLongitude?: number | null;
     orderNotes: string;
     userId: string | null;
-    items: Array<{ menuItemId: string; name: string; quantity: number; imageUrl: string }>;
+    items: Array<{ menuItemId: string; name: string; price: number; quantity: number; imageUrl: string }>;
     couponCode: string;
     subtotal: number;
     tax: number;
