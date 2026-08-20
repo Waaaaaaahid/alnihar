@@ -7,7 +7,11 @@ export interface AuthRequest extends Request {
   userRole?: string;
 }
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'al-nihar-local-dev-secret-2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not configured. Set JWT_SECRET in the server environment before starting the API.');
+}
+
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 export function generateToken(userId: string, role: string): string {
