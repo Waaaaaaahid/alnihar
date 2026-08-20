@@ -7,15 +7,20 @@ export interface AuthRequest extends Request {
   userRole?: string;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET is not configured. Set JWT_SECRET in the server environment before starting the API.');
+// Backend-only secret: validate it when JWT functionality is actually used,
+// not while Vite is merely importing the server module during a frontend build.
+function getJWTSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET is not configured. Set JWT_SECRET in the server environment before starting the API.');
+  }
+  return secret;
 }
 
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 export function generateToken(userId: string, role: string): string {
-  return jwt.sign({ userId, role }, JWT_SECRET, {
+  return jwt.sign({ userId, role }, getJWTSecret(), {
     expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
   });
 }
@@ -38,11 +43,14 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     return res.status(401).json({ success: false, message: 'No token provided' });
   }
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, getJWTSecret()) as any;
     req.userId = decoded.userId;
     req.userRole = decoded.role;
     next();
-  } catch {
+  } catch (err: any) {
+    if (err?.message?.includes('JWT_SECRET is not configured')) {
+      return res.status(500).json({ success: false, message: 'Server authentication is not configured' });
+    }
     return res.status(401).json({ success: false, message: 'Invalid or expired token' });
   }
 }
@@ -66,11 +74,12 @@ export function optionalAuth(req: AuthRequest, _res: Response, next: NextFunctio
   const token = extractToken(req);
   if (token) {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as any;
+      const decoded = jwt.verify(token, getJWTSecret()) as any;
       req.userId = decoded.userId;
       req.userRole = decoded.role;
     } catch {
-      // ignore invalid token for optional auth
+      // Ignore invalid tokens for optional auth. Authentication remains unavailable
+      // until the backend JWT_SECRET is configured.
     }
   }
   next();
