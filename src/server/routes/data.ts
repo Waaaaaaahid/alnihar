@@ -43,6 +43,17 @@ router.put('/users/:id/cod', authMiddleware, adminMiddleware, async (req: AuthRe
     const user = await User.findOneAndUpdate({ _id: req.params.id, role: 'customer' }, { codEnabled: req.body.enabled }, { new: true }).select('-password');
     if (!user) return error(res, 'Customer not found', 404);
     return success(res, { id: user._id, codEnabled: user.codEnabled === true }, `COD ${user.codEnabled ? 'enabled' : 'locked'} for customer`);
+  } catch (e: any) { return error(res, e.message, 400); }
+});
+
+router.put('/users/:id/role', authMiddleware, adminMiddleware, async (req: AuthRequest, res: any) => {
+  try {
+    const { role } = req.body;
+    if (!['customer', 'admin'].includes(role)) return error(res, 'Invalid role', 400);
+    if (String(req.userId) === String(req.params.id)) return error(res, 'You cannot change your own admin role', 400);
+    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password');
+    if (!user) return error(res, 'User not found', 404);
+    return success(res, { id: user._id, name: user.name, email: user.email, role: user.role }, 'User role updated');
   } catch (e: any) { return error(res, e.message, 500); }
 });
 
