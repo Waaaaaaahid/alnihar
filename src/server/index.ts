@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth';
@@ -13,8 +14,15 @@ import { error } from './utils/helpers';
 export function createServer() {
   const app = express();
 
+  const clientUrl = process.env.CLIENT_URL;
+  if (!clientUrl) {
+    throw new Error('CLIENT_URL is not configured. Set the production frontend URL in the server environment.');
+  }
+
+  app.disable('x-powered-by');
+  app.use(helmet());
   app.use(cors({
-    origin: process.env.CLIENT_URL || '*',
+    origin: clientUrl,
     credentials: true,
   }));
   app.use(cookieParser());
