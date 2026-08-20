@@ -15,9 +15,7 @@ router.post('/register', async (req: AuthRequest, res: any) => {
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return error(res, 'Email already registered', 409);
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userCount = await User.countDocuments();
-    const role = userCount === 0 ? 'admin' : 'customer';
-    const user = await User.create({ name, email: email.toLowerCase(), password: hashedPassword, phone: phone || '', role, codEnabled: false });
+    const user = await User.create({ name, email: email.toLowerCase(), password: hashedPassword, phone: phone || '', role: 'customer', codEnabled: false });
     const token = generateToken(String(user._id), user.role);
     res.cookie('token', token, { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
     return success(res, { token, user: publicUser(user) }, 'Account created successfully', 201);
