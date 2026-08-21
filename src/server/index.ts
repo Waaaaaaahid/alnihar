@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+import { rateLimit } from 'express-rate-limit';
 import authRoutes from './routes/auth';
 import catalogRoutes from './routes/catalog';
 import orderRoutes from './routes/orders';
@@ -19,12 +20,14 @@ export function createServer() {
     throw new Error('CLIENT_URL is not configured. Set the production frontend URL in the server environment.');
   }
 
+  const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many authentication attempts. Please try again later.' } });
+  const registerLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many registration attempts. Please try again later.' } });
+  const paymentLimiter = rateLimit({ windowMs: 5 * 60 * 1000, limit: 30, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many payment requests. Please try again later.' } });
+  const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many requests. Please try again later.' } });
+
   app.disable('x-powered-by');
   app.use(helmet());
-  app.use(cors({
-    origin: clientUrl,
-    credentials: true,
-  }));
+  app.use(cors({ origin: clientUrl, credentials: true }));
   app.use(cookieParser());
 
   // Razorpay signs the exact raw webhook payload, so this route must run before express.json().
@@ -35,6 +38,12 @@ export function createServer() {
   app.get('/api/health', (_req, res) => {
     res.json({ success: true, message: 'AL NIHAR API is running', timestamp: new Date().toISOString() });
   });
+
+  app.use('/api/auth/register', registerLimiter);
+  app.use('/api/auth/login', authLimiter);
+  app.use('/api/payments/razorpay/checkout', paymentLimiter);
+  app.use('/api/payments/razorpay/verify', paymentLimiter);
+  app.use('/api', apiLimiter);
 
   app.use('/api/auth', authRoutes);
   app.use('/api', catalogRoutes);
