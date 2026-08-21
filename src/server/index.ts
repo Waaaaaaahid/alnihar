@@ -15,10 +15,12 @@ import { error } from './utils/helpers';
 export function createServer() {
   const app = express();
 
-  const clientUrl = process.env.CLIENT_URL;
-  if (!clientUrl) {
-    throw new Error('CLIENT_URL is not configured. Set the production frontend URL in the server environment.');
-  }
+  // Production frontend is explicitly allowlisted. CLIENT_URL can override it
+  // (or provide a comma-separated list for additional trusted frontends).
+  const clientUrls = (process.env.CLIENT_URL || 'https://alnihar.vercel.app')
+    .split(',')
+    .map((url) => url.trim().replace(/\/$/, ''))
+    .filter(Boolean);
 
   const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many authentication attempts. Please try again later.' } });
   const registerLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many registration attempts. Please try again later.' } });
@@ -27,7 +29,11 @@ export function createServer() {
 
   app.disable('x-powered-by');
   app.use(helmet());
-  app.use(cors({ origin: clientUrl, credentials: true }));
+  app.use(cors({ origin: (origin, callback) => {
+    // Non-browser/server-to-server requests may have no Origin header.
+    if (!origin || clientUrls.includes(origin.replace(/\/$/, ''))) return callback(null, true);
+    return callback(new Error('CORS origin not allowed'));
+  }, credentials: true }));
   app.use(cookieParser());
 
   // Razorpay signs the exact raw webhook payload, so this route must run before express.json().
