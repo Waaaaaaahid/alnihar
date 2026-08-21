@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { TableBooking } from '../models/TableBooking';
-import { User } from '../models/User';
 import { authMiddleware, adminMiddleware, AuthRequest } from '../middleware/auth';
 import { success, error } from '../utils/helpers';
 
@@ -11,7 +10,7 @@ function validPhone(v: unknown) { return typeof v === 'string' && /^[0-9+()\-\s]
 function validDate(v: unknown) { return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(new Date(`${v}T00:00:00`).getTime()); }
 function validTime(v: unknown) { return typeof v === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(v); }
 
-router.post('/', async (req: AuthRequest, res: any) => {
+router.post('/', authMiddleware, async (req: AuthRequest, res: any) => {
   try {
     const { customerName, customerPhone, customerEmail, date, time, guests, notes } = req.body;
     if (typeof customerName !== 'string' || !customerName.trim() || customerName.trim().length > 100) return error(res, 'Invalid name', 400);
@@ -29,14 +28,14 @@ router.post('/', async (req: AuthRequest, res: any) => {
       bookingNumber: bookingNumber(),
       customerName: customerName.trim(), customerPhone: customerPhone.trim(),
       customerEmail: customerEmail?.trim() || '', date, time, guests: guestCount,
-      notes: notes?.trim() || '', userId: req.userId || null,
+      notes: notes?.trim() || '', userId: req.userId,
     });
     return success(res, booking, 'Table booking request received', 201);
   } catch (e: any) { return error(res, e.message || 'Failed to create booking', 500); }
 });
 
 router.get('/mine', authMiddleware, async (req: AuthRequest, res: any) => {
-  try { return success(res, await TableBooking.find({ userId: req.userId }).sort({ createdAt: -1 })); }
+  try { return success(res, await TableBooking.find({ userId: req.userId }).sort({ createdAt: -1 }).limit(100)); }
   catch (e: any) { return error(res, e.message, 500); }
 });
 
