@@ -16,10 +16,14 @@ import { error } from './utils/helpers';
 export function createServer() {
   const app = express();
   const clientUrls = (process.env.CLIENT_URL || 'https://alnihar.vercel.app').split(',').map((url) => url.trim().replace(/\/$/, '')).filter(Boolean);
+
+  // Render runs behind a proxy. Trust the first proxy so rate limiting uses the real client IP.
+  app.set('trust proxy', 1);
+
   const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many authentication attempts. Please try again later.' } });
   const registerLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 10, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many registration attempts. Please try again later.' } });
   const paymentLimiter = rateLimit({ windowMs: 5 * 60 * 1000, limit: 30, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many payment requests. Please try again later.' } });
-  const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many requests. Please try again later.' } });
+  const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 1000, standardHeaders: 'draft-8', legacyHeaders: false, message: { success: false, message: 'Too many requests. Please try again later.' } });
 
   app.disable('x-powered-by');
   app.use(helmet());
