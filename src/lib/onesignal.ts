@@ -31,7 +31,12 @@ export function initWebPush() {
 
 export async function enableAdminWebPush(adminId: string) {
   const OneSignal = await initWebPush();
-  await OneSignal.login(adminId);
   await OneSignal.Notifications.requestPermission();
+  if (!OneSignal.Notifications.permission) throw new Error('Notification permission was not granted.');
+  await OneSignal.login(String(adminId));
+  if (!OneSignal.User?.PushSubscription?.optedIn) {
+    await OneSignal.User.PushSubscription.optIn();
+  }
+  await OneSignal.User.addTags({ role: 'admin' });
   return Boolean(OneSignal.User?.PushSubscription?.optedIn);
 }
