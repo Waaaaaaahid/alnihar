@@ -11,9 +11,8 @@ export async function sendNewOrderNotifications(order: OrderLike) {
 async function sendOneSignal(order: OrderLike) {
   const appId = env('ONESIGNAL_APP_ID');
   const apiKey = env('ONESIGNAL_REST_API_KEY');
-  const externalId = env('ONESIGNAL_ADMIN_EXTERNAL_ID');
-  if (!appId || !apiKey || !externalId) {
-    console.error('[OneSignal] Missing ONESIGNAL_APP_ID, ONESIGNAL_REST_API_KEY, or ONESIGNAL_ADMIN_EXTERNAL_ID');
+  if (!appId || !apiKey) {
+    console.error('[OneSignal] Missing ONESIGNAL_APP_ID or ONESIGNAL_REST_API_KEY');
     return;
   }
   const response = await fetch('https://api.onesignal.com/notifications', {
@@ -22,7 +21,7 @@ async function sendOneSignal(order: OrderLike) {
     body: JSON.stringify({
       app_id: appId,
       target_channel: 'push',
-      include_aliases: { external_id: [externalId] },
+      filters: [{ field: 'tag', key: 'role', relation: '=', value: 'admin' }],
       headings: { en: '🛎️ New AL NIHAR Order' },
       contents: { en: `Order #${order.orderNumber} • ₹${Number(order.total).toFixed(0)} • ${order.customerName}` },
       url: `${env('CLIENT_URL') || ''}/admin/orders`,
