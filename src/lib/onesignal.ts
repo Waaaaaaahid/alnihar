@@ -29,14 +29,23 @@ export function initWebPush() {
   return initPromise;
 }
 
-export async function enableAdminWebPush(adminId: string) {
+export async function syncAdminWebPush(adminId: string) {
   const OneSignal = await initWebPush();
-  await OneSignal.Notifications.requestPermission();
-  if (!OneSignal.Notifications.permission) throw new Error('Notification permission was not granted.');
   await OneSignal.login(String(adminId));
+  const permission = OneSignal.Notifications.permission;
+  if (!permission) return false;
   if (!OneSignal.User?.PushSubscription?.optedIn) {
     await OneSignal.User.PushSubscription.optIn();
   }
   await OneSignal.User.addTags({ role: 'admin' });
   return Boolean(OneSignal.User?.PushSubscription?.optedIn);
+}
+
+export async function enableAdminWebPush(adminId: string) {
+  const OneSignal = await initWebPush();
+  if (!OneSignal.Notifications.permission) {
+    await OneSignal.Notifications.requestPermission();
+  }
+  if (!OneSignal.Notifications.permission) throw new Error('Notification permission was not granted.');
+  return syncAdminWebPush(adminId);
 }
