@@ -1,33 +1,35 @@
 type OrderLike = { orderNumber: string; customerName: string; total: number; paymentMethod: string; orderType: string; deliveryAddress?: string };
+type BookingLike = { bookingNumber: string; customerName: string; customerPhone: string; date: string; time: string; guests: number; notes?: string };
 const env = (name: string) => process.env[name]?.trim();
 
-export async function sendNewOrderNotifications(order: OrderLike) {
-  console.log(`[Notifications] START order=${order.orderNumber}`);
-  try {
-    await sendOneSignal(order);
-  } catch (error) {
-    console.error('[Notifications] OneSignal FAILED:', error);
-  }
-  try {
-    await sendWhatsApp(order);
-  } catch (error) {
-    console.error('[Notifications] WhatsApp FAILED:', error);
-  }
-  console.log(`[Notifications] END order=${order.orderNumber}`);
-}
-
-async function sendOneSignal(order: OrderLike) {
+async function sendPush(title: string, contents: string, urlPath: string) {
   const appId = env('ONESIGNAL_APP_ID');
   const apiKey = env('ONESIGNAL_REST_API_KEY');
   if (!appId || !apiKey) throw new Error('Missing ONESIGNAL_APP_ID or ONESIGNAL_REST_API_KEY');
   const response = await fetch('https://api.onesignal.com/notifications', {
     method: 'POST',
     headers: { Authorization: `Key ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ app_id: appId, target_channel: 'push', filters: [{ field: 'tag', key: 'role', relation: '=', value: 'admin' }], headings: { en: '🛎️ New AL NIHAR Order' }, contents: { en: `Order #${order.orderNumber} • ₹${Number(order.total).toFixed(0)} • ${order.customerName}` }, url: `${env('CLIENT_URL') || 'https://alnihar.vercel.app'}/admin/orders` }),
+    body: JSON.stringify({ app_id: appId, target_channel: 'push', filters: [{ field: 'tag', key: 'role', relation: '=', value: 'admin' }], headings: { en: title }, contents: { en: contents }, url: `${env('CLIENT_URL') || 'https://alnihar.vercel.app'}${urlPath}` }),
   });
   const body = await response.text();
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${body}`);
   console.log('[Notifications] OneSignal ACCEPTED:', body);
+}
+
+export async function sendNewOrderNotifications(order: OrderLike) {
+  console.log(`[Notifications] START order=${order.orderNumber}`);
+  try { await sendPush('🛎️ New AL NIHAR Order', `Order #${order.orderNumber} • ₹${Number(order.total).toFixed(0)} • ${order.customerName}`, '/admin/orders'); }
+  catch (error) { console.error('[Notifications] OneSignal FAILED:', error); }
+  try { await sendWhatsApp(order); }
+  catch (error) { console.error('[Notifications] WhatsApp FAILED:', error); }
+  console.log(`[Notifications] END order=${order.orderNumber}`);
+}
+
+export async function sendTableBookingNotifications(booking: BookingLike) {
+  console.log(`[Notifications] START booking=${booking.bookingNumber}`);
+  try { await sendPush('🪑 New AL NIHAR Table Booking', `Booking #${booking.bookingNumber} • ${booking.customerName} • ${booking.date} ${booking.time} • ${booking.guests} guests`, '/admin/bookings'); }
+  catch (error) { console.error('[Notifications] Booking OneSignal FAILED:', error); }
+  console.log(`[Notifications] END booking=${booking.bookingNumber}`);
 }
 
 async function sendWhatsApp(order: OrderLike) {
