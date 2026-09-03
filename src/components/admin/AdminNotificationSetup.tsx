@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bell, Check, Loader2 } from 'lucide-react';
-import { enableAdminWebPush, isWebPushConfigured } from '@/lib/onesignal';
+import { enableAdminWebPush, initWebPush, isWebPushConfigured, syncAdminWebPush } from '@/lib/onesignal';
 import { useAuth } from '@/context/AuthContext';
 
 export default function AdminNotificationSetup() {
   const { profile } = useAuth();
   const [state, setState] = useState<'idle' | 'loading' | 'enabled' | 'error'>('idle');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!profile?.id || !isWebPushConfigured()) return;
+    initWebPush().then(async (OneSignal) => {
+      if (cancelled) return;
+      if (OneSignal.Notifications.permission) {
+        const enabled = await syncAdminWebPush(profile.id);
+        if (!cancelled) setState(enabled ? 'enabled' : 'idle');
+      }
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [profile?.id]);
 
   if (!isWebPushConfigured()) return null;
 
@@ -28,7 +41,7 @@ export default function AdminNotificationSetup() {
   return (
     <div className="flex items-center gap-2">
       {state === 'enabled' ? (
-        <span className="hidden sm:flex items-center gap-1.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300" title={message}>
+        <span className="hidden sm:flex items-center gap-1.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300" title="Push notifications are enabled on this device">
           <Check className="h-3.5 w-3.5" /> Notifications on
         </span>
       ) : (
