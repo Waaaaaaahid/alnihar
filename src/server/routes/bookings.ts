@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { TableBooking } from '../models/TableBooking';
 import { authMiddleware, adminMiddleware, AuthRequest } from '../middleware/auth';
 import { success, error } from '../utils/helpers';
+import { sendTableBookingNotifications } from '../services/notifications';
 
 const router = Router();
 
@@ -30,6 +31,9 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: any) => {
       customerEmail: customerEmail?.trim() || '', date, time, guests: guestCount,
       notes: notes?.trim() || '', userId: req.userId,
     });
+    console.log(`[Bookings] Created ${booking.bookingNumber}; starting notifications`);
+    await sendTableBookingNotifications({ bookingNumber: booking.bookingNumber, customerName: booking.customerName, customerPhone: booking.customerPhone, date: booking.date, time: booking.time, guests: booking.guests, notes: booking.notes });
+    console.log(`[Bookings] Notifications finished for ${booking.bookingNumber}`);
     return success(res, booking, 'Table booking request received', 201);
   } catch (e: any) { return error(res, e.message || 'Failed to create booking', 500); }
 });
