@@ -43,8 +43,9 @@ router.get('/mine', authMiddleware, async (req: AuthRequest, res: any) => {
   catch (e: any) { return error(res, e.message, 500); }
 });
 
+// Admin: newest submitted booking first, matching the customer "My Bookings" order.
 router.get('/', authMiddleware, adminMiddleware, async (_req, res: any) => {
-  try { return success(res, await TableBooking.find().sort({ date: 1, time: 1, createdAt: -1 }).limit(500)); }
+  try { return success(res, await TableBooking.find().sort({ createdAt: -1 }).limit(500)); }
   catch (e: any) { return error(res, e.message, 500); }
 });
 
